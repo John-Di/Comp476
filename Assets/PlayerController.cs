@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 		var speed = new Vector3(0, rigidbody.velocity.y, 0);
 		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.right * axisX * moveSpeed * Time.deltaTime;
 		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.forward * axisZ * moveSpeed * Time.deltaTime;
-		rigidbody.velocity = (speed);
+		rigidbody.velocity = speed;
 	}
 }
 
