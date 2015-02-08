@@ -4,6 +4,7 @@ using System.Collections;
 
 public class Flashlight : MonoBehaviour 
 {
+	public AudioSource click;
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +18,7 @@ public class Flashlight : MonoBehaviour
 		{
 			gameObject.GetComponent<Light>().intensity++;			
 			gameObject.GetComponent<Light>().intensity %= 2;
+			click.Play();
 		}
 	}
 	
