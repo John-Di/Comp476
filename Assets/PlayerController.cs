@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 	Transform head;
 	
 	float rotationX = 0;
-	float rotationY = 180f;
+	float rotationY = 0f;
 	
 	void Awake()
 	{
