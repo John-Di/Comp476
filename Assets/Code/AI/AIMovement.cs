@@ -18,7 +18,7 @@ public class AIMovement : MonoBehaviour
 		halt = false;
 		velocity = Vector3.zero;
 		path = new List<Vector3>();
-		UpdatePath(new Vector3(Random.Range(0f,50f), 0f, Random.Range(0f,50f)));
+		AddToPath(new Vector3(Random.Range(0f,50f), 0f, Random.Range(0f,50f)));
 		target = transform.position;
 	}
 
@@ -97,17 +97,17 @@ public class AIMovement : MonoBehaviour
 		transform.rotation = Quaternion.LookRotation(newDir);
 	}
 	
-	public void UpdatePath(List<Vector3> p)
+	public void AddToPath(List<Vector3> p)
 	{
 		path = new List<Vector3>();
 		
 		foreach(Vector3 t in p)
 		{
-			UpdatePath(t);
+			AddToPath(t);
 		}		
 	}
 
-	public void UpdatePath(Vector3 p)
+	public void AddToPath(Vector3 p)
 	{
 		path.Add(p);	
 	}
