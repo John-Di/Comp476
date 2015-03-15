@@ -12,6 +12,7 @@ public class AIMovement : MonoBehaviour
 
 	public List<Vector3> path;
 	bool halt;
+	public bool wander;
 	
 	void Start()
 	{
@@ -46,11 +47,11 @@ public class AIMovement : MonoBehaviour
 		{
 			target = path[0];
 			path.Remove(target);
-		}/* Allow poor wandering
-		else if(path.Count == 0)
+		}
+		else if(path.Count == 0 && wander)
 		{
 			path.Add(new Vector3(Random.Range(0f,50f), 0f, Random.Range(0f,50f)));
-		}*/
+		}
 		
 	}
 	
