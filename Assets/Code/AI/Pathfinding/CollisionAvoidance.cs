@@ -48,7 +48,8 @@ public class CollisionAvoidance : MonoBehaviour {
 		//If avoiding on the wrong side of the obstacle (e.g. one side of the obstacle is on the wall), rotate to avoid on other side
 		if(Physics.Raycast(ray, out hitLayout, 1, AI_Pathfinding.layoutMask))
 		{
-			transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation( (hitLayout.point + hitLayout.normal) - transform.position ), Time.deltaTime );
+			transform.rotation = Quaternion.LookRotation( (hitLayout.point + hitLayout.normal) - transform.position );
+			//transform.rotation = Quaternion.Slerp( transform.rotation, Quaternion.LookRotation( (hitLayout.point + hitLayout.normal) - transform.position ), Time.deltaTime );
 			//If avoiding the wall makes the agent lose sight of the target he was seeking, need to recompute the path
 			if(Physics.Linecast(transform.position, target, AI_Pathfinding.layoutMask))
 			{
