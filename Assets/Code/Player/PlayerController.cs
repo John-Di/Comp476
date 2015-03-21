@@ -7,12 +7,15 @@ public class PlayerController : MonoBehaviour
 	public float turnSpeed = 200f;
 	public float moveSpeed = 200f;
 	public float jumpForce = 100f;
-	
+	public bool isGrounded = true;
+
 	Transform head;
 	
 	float rotationX = 0;
 	float rotationY = 0f;
-	
+
+	public int roomNumber = 0;
+
 	void Awake()
 	{
 		Screen.lockCursor = true;
@@ -21,8 +24,10 @@ public class PlayerController : MonoBehaviour
 	
 	void Update()
 	{
-		UpdateRotation();
-		UpdateMovement();
+		if (isGrounded) {
+			UpdateRotation ();
+			UpdateMovement ();
+		}
 	}
 	
 	void UpdateRotation()
@@ -46,6 +51,14 @@ public class PlayerController : MonoBehaviour
 		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.right * axisX * moveSpeed * Time.deltaTime;
 		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.forward * axisZ * moveSpeed * Time.deltaTime;
 		rigidbody.velocity = speed;
+	}
+
+	public void SetRoomNumber(int room){
+		roomNumber = room;
+	}
+
+	public int GetRoomNumber(){
+		return roomNumber;
 	}
 }
 

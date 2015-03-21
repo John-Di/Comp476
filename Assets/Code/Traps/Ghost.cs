@@ -19,7 +19,9 @@ public class Ghost : MonoBehaviour
 	{
 		if(coll.tag == "Player")
 		{
-			scream.Play();
+			if(!scream.isPlaying){
+				scream.Play();
+			}
 		}
 	}
 }
