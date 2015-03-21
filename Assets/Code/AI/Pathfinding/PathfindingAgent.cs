@@ -14,6 +14,8 @@ public class PathfindingAgent : MonoBehaviour {
 	List<TriangleNode> closedList = new List<TriangleNode>();
 	List<Vector3> pathVertices = new List<Vector3> ();
 	IComparer<TriangleNode> comparer = new TriangleNode();
+	//Keep track of node with the lowest EstimatedDistanceToEnd for unreachable endNodes
+	TriangleNode smallestHeuristicNode;
 
 	AIMovement movement;
 	CollisionAvoidance avoid;
@@ -56,6 +58,11 @@ public class PathfindingAgent : MonoBehaviour {
 		if(!Physics.Linecast(transform.position, target.transform.position, AI_Pathfinding.layoutMask))
 			curTarget = target.transform.position;
 
+		if(avoid.enabled)
+		{
+			avoid.target = curTarget;
+		}
+
 		RaycastHit hit;
 		//Check for collisions with dynamic obstacles (e.g. doors)
 		if(Physics.Raycast (transform.position, (curTarget - transform.position), out hit, (curTarget - transform.position).magnitude, AI_Pathfinding.movingMask))
@@ -66,7 +73,6 @@ public class PathfindingAgent : MonoBehaviour {
 			{
 				movement.enabled = false;
 				avoid.enabled = true;
-				avoid.target = curTarget;
 				return;
 			}
 			else if(pathVertices[pathVertices.Count - 1] != endNode.nodePosition)
@@ -133,7 +139,7 @@ public class PathfindingAgent : MonoBehaviour {
 		//Path
 		for(int i = 0; i < pathVertices.Count - 1; i++)
 		{
-			Debug.DrawLine(pathVertices[i], pathVertices[i + 1], Color.red);
+			Debug.DrawLine(pathVertices[i], pathVertices[i + 1], Color.green);
 		}
 
 		//Fill
@@ -164,6 +170,7 @@ public class PathfindingAgent : MonoBehaviour {
 		//Initialize start node cost and heuristic
 		startNode.costSoFar = 0;
 		startNode.heuristicValue = (endNode.nodePosition - startNode.nodePosition).magnitude;
+		smallestHeuristicNode = startNode;
 		//Calculate path
 		calculateAStarEuclideanDistance ();
 
@@ -183,6 +190,8 @@ public class PathfindingAgent : MonoBehaviour {
 
 		//Check which triangle node the agent is standing on
 		Collider[] hitColliders = Physics.OverlapSphere(position, 1f, AI_Pathfinding.navigationMask);
+		if(hitColliders.Length == 0)
+			hitColliders = Physics.OverlapSphere(position, 2f, AI_Pathfinding.navigationMask);
 		for(int i = 0; i < hitColliders.Length; i++)
 		{
 			TriangleNode n = hitColliders[i].GetComponentInParent<TriangleNode> ();
@@ -243,6 +252,11 @@ public class PathfindingAgent : MonoBehaviour {
 					//Heuristic value is euclidean distance from node to end node
 					nextNode.UpdateHeuristic((endNode.nodePosition - nextNode.nodePosition).magnitude);
 
+					if(smallestHeuristicNode.heuristicValue > nextNode.heuristicValue)
+					{
+						smallestHeuristicNode = nextNode;
+					}
+
 					openList.Add (nextNode);
 				}
 				
@@ -264,12 +278,20 @@ public class PathfindingAgent : MonoBehaviour {
 		openList.Add (startNode);
 
 		//Loop through the nodes until endNode is found or endNode is in unreacheable closed room
-		while (openList[0] != endNode && visitNode_AStarEuclideanDistance (openList[0]));
+		while (openList[0] != endNode)
+		{
+			if(!visitNode_AStarEuclideanDistance (openList[0]))
+			{
+				openList[0] = smallestHeuristicNode;
+				break;
+			}
+		}
 
 		pathList.Add (openList [0]);
+		if(openList[0] == startNode)
+			return;
+
 		while(true) {
-			if(openList.Count == 1)
-				return;
 			if (pathList[pathList.Count - 1].prevNode == startNode) {
 				pathList.Add (pathList[pathList.Count - 1].prevNode);
 				pathList.Reverse ();
@@ -310,7 +332,6 @@ public class PathfindingAgent : MonoBehaviour {
 			}
 		}
 
-		//If no nodes were visible, return input path (rare case)
 		if(outputPath.Count == 0)
 			return inputPath;
 
