@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
 	void Awake()
 	{
 		anim = transform.GetChild(0).GetComponent<Animator>();
-		Die ();
 		Screen.lockCursor = true;
 		head = GameObject.Find("Head").transform;
 	}
@@ -59,7 +58,7 @@ public class PlayerController : MonoBehaviour
 		rigidbody.velocity = speed;
 	}
 
-	void Die()
+	public void Die()
 	{
 		anim.SetBool("isDead", true);
 	}
