@@ -8,7 +8,7 @@ namespace Rerum.Code.Menu
 	{
 		public void New()
 		{
-			Application.LoadLevel ("Main");
+			Application.LoadLevel ("TestMap");
 		}
 
 		public void Quit(){
