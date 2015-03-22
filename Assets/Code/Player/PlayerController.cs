@@ -47,5 +47,10 @@ public class PlayerController : MonoBehaviour
 		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.forward * axisZ * moveSpeed * Time.deltaTime;
 		rigidbody.velocity = speed;
 	}
+
+	void Die()
+	{
+		GetComponent<Animator>().SetBool("isDead", true);
+	}
 }
 
