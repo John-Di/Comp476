@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 	public float turnSpeed = 200f;
 	public float moveSpeed = 200f;
 	public float jumpForce = 100f;
-	Animator anim;
+	public Animator anim;
 
 	Transform head;
 	
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 	
 	void Awake()
 	{
-		anim = transform.GetChild(0).GetComponent<Animator>();
+		anim = transform.GetChild(0).GetComponent<Animator>();Die ();
 		Screen.lockCursor = true;
 		head = GameObject.Find("Head").transform;
 	}
