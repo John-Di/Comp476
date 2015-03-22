@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 	void Awake()
 	{
 		anim = transform.GetChild(0).GetComponent<Animator>();
+		Die ();
 		Screen.lockCursor = true;
 		head = GameObject.Find("Head").transform;
 	}
@@ -27,6 +28,11 @@ public class PlayerController : MonoBehaviour
 		{
 			UpdateRotation();
 			UpdateMovement();
+		}
+		else
+		{			
+			rigidbody.velocity = Vector3.zero;
+			rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 		}
 	}
 	
