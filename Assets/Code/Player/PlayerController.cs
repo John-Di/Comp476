@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
 	public float turnSpeed = 200f;
 	public float moveSpeed = 200f;
 	public float jumpForce = 100f;
-	
+	Animator anim;
+
 	Transform head;
 	
 	float rotationX = 0;
@@ -15,14 +16,18 @@ public class PlayerController : MonoBehaviour
 	
 	void Awake()
 	{
+		anim = transform.GetChild(0).GetComponent<Animator>();
 		Screen.lockCursor = true;
-		head = transform.Find("Head").transform;
+		head = GameObject.Find("Head").transform;
 	}
 	
 	void Update()
 	{
-		UpdateRotation();
-		UpdateMovement();
+		if(!anim.GetBool("isDead"))
+		{
+			UpdateRotation();
+			UpdateMovement();
+		}
 	}
 	
 	void UpdateRotation()
@@ -50,7 +55,7 @@ public class PlayerController : MonoBehaviour
 
 	void Die()
 	{
-		GetComponent<Animator>().SetBool("isDead", true);
+		anim.SetBool("isDead", true);
 	}
 }
 
