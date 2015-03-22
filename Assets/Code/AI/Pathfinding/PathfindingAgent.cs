@@ -190,8 +190,6 @@ public class PathfindingAgent : MonoBehaviour {
 
 		//Check which triangle node the agent is standing on
 		Collider[] hitColliders = Physics.OverlapSphere(position, 1f, AI_Pathfinding.navigationMask);
-		if(hitColliders.Length == 0)
-			hitColliders = Physics.OverlapSphere(position, 2f, AI_Pathfinding.navigationMask);
 		for(int i = 0; i < hitColliders.Length; i++)
 		{
 			TriangleNode n = hitColliders[i].GetComponentInParent<TriangleNode> ();

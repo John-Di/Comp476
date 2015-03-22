@@ -34,16 +34,7 @@ public class CollisionAvoidance : MonoBehaviour {
 			return;
 		}
 
-		RaycastHit hit;
 		Ray ray = new Ray(transform.position, transform.forward);
-		//Get normal of obstacle and add it to the direction
-		if(Physics.Raycast(ray, out hit, Vector3.Distance(target, transform.position), AI_Pathfinding.movingMask))
-		{
-			obstacle = hit.transform.GetComponent<MovingObject>();
-
-			direction += hit.normal * repelForce;
-		}
-
 		RaycastHit hitLayout;
 		//If avoiding on the wrong side of the obstacle (e.g. one side of the obstacle is on the wall), rotate to avoid on other side
 		if(Physics.Raycast(ray, out hitLayout, 1, AI_Pathfinding.layoutMask))
@@ -56,10 +47,19 @@ public class CollisionAvoidance : MonoBehaviour {
 				agent.UpdatePath();
 				movement.enabled = true;
 				enabled = false;
+				return;
 			}
-			return;
 		}
-		
+
+		RaycastHit hit;
+		//Get normal of obstacle and add it to the direction
+		if(Physics.Raycast(ray, out hit, Vector3.Distance(target, transform.position), AI_Pathfinding.movingMask))
+		{
+			obstacle = hit.transform.GetComponent<MovingObject>();
+
+			direction += hit.normal * repelForce;
+		}
+
 		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (direction), Time.deltaTime);
 		transform.rotation = Quaternion.Euler (0, transform.rotation.eulerAngles.y, 0);
 		transform.position += transform.forward * speed * Time.deltaTime;
