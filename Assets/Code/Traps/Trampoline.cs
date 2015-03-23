@@ -2,10 +2,15 @@
 using System.Collections;
 
 public class Trampoline : Trap {
+	public bool trapActive;
 
-	// Use this for initialization
+		// Use this for initialization
 	void Start () {
 	
+	}
+
+	void Update(){
+		trapActive = isTrapEnabled;
 	}
 	
 	void OnTriggerEnter(Collider other){
@@ -19,7 +24,6 @@ public class Trampoline : Trap {
 				DisableTrap();
 				StartCoroutine("RegainControl");
 			}
-
 		}
 	}
 
@@ -27,5 +31,7 @@ public class Trampoline : Trap {
 		yield return new WaitForSeconds(2f);
 	//	pc.isGrounded= true;
 		player.rigidbody.constraints = RigidbodyConstraints.None;
+		yield return new WaitForSeconds (5f);
+		EnableTrap ();
 	}
 }
