@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class MovingObject : MonoBehaviour {
 	public bool isBlocking = false;
+	public bool moveStopped = false;
+
+	bool hasMoved = false;
 
 	float radius;
 
@@ -16,13 +19,30 @@ public class MovingObject : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		UpdateHasMoved ();
+
+		//Only update the blocking condition if moved
+		if(moveStopped)
+			UpdateIsBlocking();
+	}
+
+	void UpdateHasMoved()
+	{
+		//Check if last obstacle recorded has moved (e.g. a door that was just closed has opened)
+		bool obstacleMovedStopped = false;
 		curPos = transform.position;
 		if(curPos != lastPos)
 		{
-			//Only update the blocking condition if moved
-			UpdateIsBlocking();
+			hasMoved = true;
+		}
+		else if(hasMoved)
+		{
+			obstacleMovedStopped = true;
+			hasMoved = false;
 		}
 		lastPos = curPos;
+		
+		moveStopped = obstacleMovedStopped;
 	}
 
 	void UpdateIsBlocking()

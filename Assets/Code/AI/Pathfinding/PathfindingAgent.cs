@@ -21,8 +21,8 @@ public class PathfindingAgent : MonoBehaviour {
 	AIMovement movement;
 	CollisionAvoidance avoid;
 	
-	Vector3 curPos, lastPos, lastObstacleCurPos, lastObstacleLastPos;
-	bool targetMoved = false, lastObstacleMoved = false;
+	Vector3 curPos, lastPos;
+	bool targetMoved = false;
 	float lastMoveTime = 0f, tryTime = 0f;
 
 	MovingObject lastObstacle;
@@ -106,23 +106,10 @@ public class PathfindingAgent : MonoBehaviour {
 	bool ObstacleMoved()
 	{
 		//Check if last obstacle recorded has moved (e.g. a door that was just closed has opened)
-		bool obstacleMovedStopped = false;
 		if(lastObstacle != null)
-		{
-			lastObstacleCurPos = lastObstacle.transform.position;
-			if(lastObstacleCurPos != lastObstacleLastPos)
-			{
-				lastObstacleMoved = true;
-			}
-			else if(lastObstacleMoved)
-			{
-				obstacleMovedStopped = true;
-				lastObstacleMoved = false;
-			}
-			lastObstacleLastPos = lastObstacleCurPos;
-		}
+			return lastObstacle.moveStopped;
 
-		return obstacleMovedStopped;
+		return false;
 	}
 
 	bool TargetMoved()
@@ -133,7 +120,8 @@ public class PathfindingAgent : MonoBehaviour {
 		if(curPos != lastPos)
 		{
 			targetMoved = true;
-			lastMoveTime += Time.deltaTime;
+			if(lastMoveTime < tryTime)
+				lastMoveTime += Time.deltaTime;
 		}
 		else if(targetMoved)
 		{
@@ -207,11 +195,18 @@ public class PathfindingAgent : MonoBehaviour {
 
 		//Check which triangle node the agent is standing on
 		Collider[] hitColliders = Physics.OverlapSphere(position, 1f, AI_Pathfinding.navigationMask);
+		if(hitColliders.Length == 0)
+		{
+			hitColliders = Physics.OverlapSphere(position, 2f, AI_Pathfinding.navigationMask);
+		}
 		for(int i = 0; i < hitColliders.Length; i++)
 		{
-			TriangleNode n = hitColliders[i].GetComponentInParent<TriangleNode> ();
-			if(n != null)
-				return n;
+			if(!Physics.Linecast(position, hitColliders[i].transform.position, AI_Pathfinding.layoutMask))
+			{
+				TriangleNode n = hitColliders[i].GetComponentInParent<TriangleNode> ();
+				if(n != null)
+					return n;
+			}
 		}
 
 		return startNode;
@@ -352,22 +347,10 @@ public class PathfindingAgent : MonoBehaviour {
 			}
 		}
 
-		if(outputPath.Count == 0)
-			return inputPath;
-
-		//From the first visible node, further add to the path only the necessary nodes to access endNode
-		for(int i = (index + 2); i < inputPath.Count; i++)
+		for(int i = (index + 1); i < inputPath.Count; i++)
 		{
-			if(i > inputPath.Count - 1)
-				break;
-			if(Physics.Linecast (outputPath[outputPath.Count - 1], inputPath[i], AI_Pathfinding.layoutMask))
-			{
-				outputPath.Add(inputPath[i - 1]);
-			}
+			outputPath.Add(inputPath[i]);
 		}
-
-		//Add end node
-		outputPath.Add (inputPath[inputPath.Count - 1]);
 		
 		return outputPath;
 	}
