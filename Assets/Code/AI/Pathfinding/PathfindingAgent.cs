@@ -16,12 +16,14 @@ public class PathfindingAgent : MonoBehaviour {
 	IComparer<TriangleNode> comparer = new TriangleNode();
 	//Keep track of node with the lowest EstimatedDistanceToEnd for unreachable endNodes
 	TriangleNode smallestHeuristicNode;
+	bool unreachablePath = false;
 
 	AIMovement movement;
 	CollisionAvoidance avoid;
 	
 	Vector3 curPos, lastPos, lastObstacleCurPos, lastObstacleLastPos;
 	bool targetMoved = false, lastObstacleMoved = false;
+	float lastMoveTime = 0f, tryTime = 0f;
 
 	MovingObject lastObstacle;
 
@@ -32,11 +34,19 @@ public class PathfindingAgent : MonoBehaviour {
 		movement = GetComponent<AIMovement> ();
 		avoid = GetComponent<CollisionAvoidance> ();
 		movement.target = target.transform.position;
+		pathVertices.Add (transform.position);
+		tryTime = Random.Range(1f, 2f);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(!hasInit || ObjectMoved())
+		//If target is reachable make it the current target
+		if(!Physics.Linecast(transform.position, target.transform.position, AI_Pathfinding.layoutMask))
+		{
+			curTarget = target.transform.position;
+			pathVertices.Add(curTarget);
+		}
+		else if(!hasInit || ObstacleMoved() || TargetMoved())
 		{
 			hasInit = true;
 			try
@@ -53,30 +63,25 @@ public class PathfindingAgent : MonoBehaviour {
 		Draw();
 
 		//Current target is current node path being seeked
-		curTarget = movement.target;
-		//If target is reachable make it the current target
-		if(!Physics.Linecast(transform.position, target.transform.position, AI_Pathfinding.layoutMask))
-			curTarget = target.transform.position;
-
+		if(curTarget != target.transform.position)
+			curTarget = movement.target;
 		if(avoid.enabled)
-		{
 			avoid.target = curTarget;
-		}
 
 		RaycastHit hit;
 		//Check for collisions with dynamic obstacles (e.g. doors)
 		if(Physics.Raycast (transform.position, (curTarget - transform.position), out hit, (curTarget - transform.position).magnitude, AI_Pathfinding.movingMask))
 		{
-			lastObstacle = hit.transform.GetComponent<MovingObject>();
 			//If obstacle is not blocking, simply avoid it. Otherwise recalculate path if the current one is not going to the endNode;
-			if(!lastObstacle.isBlocking)
+			if(!hit.transform.GetComponent<MovingObject>().isBlocking)
 			{
 				movement.enabled = false;
 				avoid.enabled = true;
 				return;
 			}
-			else if(pathVertices[pathVertices.Count - 1] != endNode.nodePosition)
+			else if(pathVertices[pathVertices.Count - 1] != endNode.nodePosition && pathVertices[pathVertices.Count - 1] != smallestHeuristicNode.nodePosition)
 			{
+				lastObstacle = hit.transform.GetComponent<MovingObject>();
 				//Keep track of last blocking obstacle to trigger an update of the path in case the obstacle moves (e.g. doors opens and close)
 				try
 				{
@@ -98,7 +103,7 @@ public class PathfindingAgent : MonoBehaviour {
 			movement.UpdatePath (pathVertices);
 	}
 
-	bool ObjectMoved()
+	bool ObstacleMoved()
 	{
 		//Check if last obstacle recorded has moved (e.g. a door that was just closed has opened)
 		bool obstacleMovedStopped = false;
@@ -117,12 +122,18 @@ public class PathfindingAgent : MonoBehaviour {
 			lastObstacleLastPos = lastObstacleCurPos;
 		}
 
+		return obstacleMovedStopped;
+	}
+
+	bool TargetMoved()
+	{
 		//Check if the target has moved
 		bool targetMovedStopped = false;
 		curPos = target.transform.position;
 		if(curPos != lastPos)
 		{
 			targetMoved = true;
+			lastMoveTime += Time.deltaTime;
 		}
 		else if(targetMoved)
 		{
@@ -131,7 +142,12 @@ public class PathfindingAgent : MonoBehaviour {
 		}
 		lastPos = curPos;
 
-		return (obstacleMovedStopped || targetMovedStopped);
+		if((unreachablePath && lastMoveTime < tryTime) || !Physics.Linecast(pathVertices[pathVertices.Count - 1], curPos, AI_Pathfinding.layoutMask))
+			targetMovedStopped = false;
+		else if(targetMovedStopped)
+			lastMoveTime = 0f;
+		
+		return targetMovedStopped;
 	}
 
 	void Draw()
@@ -171,6 +187,7 @@ public class PathfindingAgent : MonoBehaviour {
 		startNode.costSoFar = 0;
 		startNode.heuristicValue = (endNode.nodePosition - startNode.nodePosition).magnitude;
 		smallestHeuristicNode = startNode;
+		unreachablePath = false;
 		//Calculate path
 		calculateAStarEuclideanDistance ();
 
@@ -221,10 +238,12 @@ public class PathfindingAgent : MonoBehaviour {
 				RaycastHit hit;
 				if(Physics.Raycast (node.nodePosition, (nextNode.nodePosition - node.nodePosition), out hit, (nextNode.nodePosition - node.nodePosition).magnitude, AI_Pathfinding.movingMask))
 				{
-					lastObstacle = hit.transform.GetComponent<MovingObject>();
 					//Only avoid node if the obstacle is blocking a path
-					if(lastObstacle.isBlocking)
+					if(hit.transform.GetComponent<MovingObject>().isBlocking)
+					{
+						lastObstacle = hit.transform.GetComponent<MovingObject>();
 						continue;
+					}
 				}
 
 				//Distance between current node and neighbor
@@ -281,6 +300,7 @@ public class PathfindingAgent : MonoBehaviour {
 			if(!visitNode_AStarEuclideanDistance (openList[0]))
 			{
 				openList[0] = smallestHeuristicNode;
+				unreachablePath = true;
 				break;
 			}
 		}
@@ -319,10 +339,12 @@ public class PathfindingAgent : MonoBehaviour {
 				//Since smoothing happens every frame, check to avoid going to a blocked off path.
 				if(Physics.Raycast (transform.position, (inputPath[i] - transform.position), out hit, (inputPath[i] - transform.position).magnitude, AI_Pathfinding.movingMask))
 				{
-					lastObstacle = hit.transform.GetComponent<MovingObject>();
 					//Only avoid node if the obstacle is blocking a path
-					if(lastObstacle.isBlocking)
+					if(hit.transform.GetComponent<MovingObject>().isBlocking)
+					{
+						lastObstacle = hit.transform.GetComponent<MovingObject>();
 						continue;
+					}
 				}
 				outputPath.Add(inputPath[i]);
 				index = i;
