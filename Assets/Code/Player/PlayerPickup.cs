@@ -54,7 +54,7 @@ public class PlayerPickup : MonoBehaviour
 	
 	void DropObject()
 	{
-		if(!Input.GetKey (KeyCode.Mouse1))
+		if(Input.GetKeyUp (KeyCode.Mouse1))
 		{
 			carrying = false;
 			hand.GetChild (0).rigidbody.isKinematic = false;
