@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ghost : MonoBehaviour 
+public class Ghost : Trap 
 {
 	public AudioSource scream;
 
@@ -17,10 +17,12 @@ public class Ghost : MonoBehaviour
 
 	void OnTriggerEnter(Collider coll)
 	{
-		if(coll.tag == "Player")
-		{
-			if(!scream.isPlaying){
-				scream.Play();
+		if (this.isTrapEnabled) {
+			if (coll.tag == "Player") {
+				if (!scream.isPlaying) {
+					scream.Play ();
+					DisableTrap();
+				}
 			}
 		}
 	}
