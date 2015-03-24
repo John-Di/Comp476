@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 	
 	void Awake()
 	{
-		anim = transform.GetChild(0).GetComponent<Animator>();Die ();
+		anim = transform.GetChild(0).GetComponent<Animator>();
 		Screen.lockCursor = true;
 		head = GameObject.Find("Head").transform;
 	}
