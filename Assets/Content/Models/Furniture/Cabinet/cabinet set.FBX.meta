@@ -1,0 +1,333 @@
+fileFormatVersion: 2
+guid: 1958338d3cedd1a49aa2def0f790a055
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: Box065
+    100002: Box39
+    100004: Box40
+    100006: Box41
+    100008: Box42
+    100010: Box43
+    100012: Box44
+    100014: Box45
+    100016: Box46
+    100018: Box47
+    100020: Box48
+    100022: Box49
+    100024: Box50
+    100026: Box51
+    100028: Box52
+    100030: Box53
+    100032: Box54
+    100034: Box55
+    100036: Box56
+    100038: Box57
+    100040: Box58
+    100042: Box59
+    100044: Box60
+    100046: Box61
+    100048: Box64
+    100050: cabinet
+    100052: //RootNode
+    100054: Camera01
+    100056: Camera01.Target
+    100058: Cylinder01
+    100060: Cylinder01 1
+    100062: dik
+    100064: dik01
+    100066: glass cabinet
+    100068: Group01
+    100070: Group02
+    100072: hood
+    100074: Layer:yaz__01
+    100076: Layer:yaz__01 1
+    100078: Line006
+    100080: Line01
+    100082: Line01 1
+    100084: Line03
+    100086: Line04
+    100088: Line05
+    100090: Line07
+    100092: Loft01
+    100094: Rectangle01
+    100096: Rectangle01 1
+    100098: Rectangle02
+    100100: sized cabinet
+    100102: Sphere01
+    100104: Sphere01 1
+    100106: Sphere02
+    100108: Sphere02 1
+    100110: Sphere03
+    100112: Sphere03 1
+    100114: Sphere04
+    100116: Sphere04 1
+    100118: Text001
+    400000: Box065
+    400002: Box39
+    400004: Box40
+    400006: Box41
+    400008: Box42
+    400010: Box43
+    400012: Box44
+    400014: Box45
+    400016: Box46
+    400018: Box47
+    400020: Box48
+    400022: Box49
+    400024: Box50
+    400026: Box51
+    400028: Box52
+    400030: Box53
+    400032: Box54
+    400034: Box55
+    400036: Box56
+    400038: Box57
+    400040: Box58
+    400042: Box59
+    400044: Box60
+    400046: Box61
+    400048: Box64
+    400050: cabinet
+    400052: //RootNode
+    400054: Camera01
+    400056: Camera01.Target
+    400058: Cylinder01
+    400060: Cylinder01 1
+    400062: dik
+    400064: dik01
+    400066: glass cabinet
+    400068: Group01
+    400070: Group02
+    400072: hood
+    400074: Layer:yaz__01
+    400076: Layer:yaz__01 1
+    400078: Line006
+    400080: Line01
+    400082: Line01 1
+    400084: Line03
+    400086: Line04
+    400088: Line05
+    400090: Line07
+    400092: Loft01
+    400094: Rectangle01
+    400096: Rectangle01 1
+    400098: Rectangle02
+    400100: sized cabinet
+    400102: Sphere01
+    400104: Sphere01 1
+    400106: Sphere02
+    400108: Sphere02 1
+    400110: Sphere03
+    400112: Sphere03 1
+    400114: Sphere04
+    400116: Sphere04 1
+    400118: Text001
+    2300000: Box065
+    2300002: Box39
+    2300004: Box40
+    2300006: Box41
+    2300008: Box42
+    2300010: Box43
+    2300012: Box44
+    2300014: Box45
+    2300016: Box46
+    2300018: Box47
+    2300020: Box48
+    2300022: Box49
+    2300024: Box50
+    2300026: Box51
+    2300028: Box52
+    2300030: Box53
+    2300032: Box54
+    2300034: Box55
+    2300036: Box56
+    2300038: Box57
+    2300040: Box58
+    2300042: Box59
+    2300044: Box60
+    2300046: Box61
+    2300048: Box64
+    2300050: Cylinder01
+    2300052: Cylinder01 1
+    2300054: dik
+    2300056: dik01
+    2300058: Layer:yaz__01
+    2300060: Layer:yaz__01 1
+    2300062: Line006
+    2300064: Line01
+    2300066: Line01 1
+    2300068: Line03
+    2300070: Line04
+    2300072: Line05
+    2300074: Line07
+    2300076: Loft01
+    2300078: Rectangle01
+    2300080: Rectangle01 1
+    2300082: Rectangle02
+    2300084: Sphere01
+    2300086: Sphere01 1
+    2300088: Sphere02
+    2300090: Sphere02 1
+    2300092: Sphere03
+    2300094: Sphere03 1
+    2300096: Sphere04
+    2300098: Sphere04 1
+    2300100: Text001
+    3300000: Box065
+    3300002: Box39
+    3300004: Box40
+    3300006: Box41
+    3300008: Box42
+    3300010: Box43
+    3300012: Box44
+    3300014: Box45
+    3300016: Box46
+    3300018: Box47
+    3300020: Box48
+    3300022: Box49
+    3300024: Box50
+    3300026: Box51
+    3300028: Box52
+    3300030: Box53
+    3300032: Box54
+    3300034: Box55
+    3300036: Box56
+    3300038: Box57
+    3300040: Box58
+    3300042: Box59
+    3300044: Box60
+    3300046: Box61
+    3300048: Box64
+    3300050: Cylinder01
+    3300052: Cylinder01 1
+    3300054: dik
+    3300056: dik01
+    3300058: Layer:yaz__01
+    3300060: Layer:yaz__01 1
+    3300062: Line006
+    3300064: Line01
+    3300066: Line01 1
+    3300068: Line03
+    3300070: Line04
+    3300072: Line05
+    3300074: Line07
+    3300076: Loft01
+    3300078: Rectangle01
+    3300080: Rectangle01 1
+    3300082: Rectangle02
+    3300084: Sphere01
+    3300086: Sphere01 1
+    3300088: Sphere02
+    3300090: Sphere02 1
+    3300092: Sphere03
+    3300094: Sphere03 1
+    3300096: Sphere04
+    3300098: Sphere04 1
+    3300100: Text001
+    4300000: Rectangle01
+    4300002: dik
+    4300004: Layer:yaz__01
+    4300006: Sphere01
+    4300008: Sphere02
+    4300010: Sphere04
+    4300012: Sphere03
+    4300014: Cylinder01
+    4300016: Line01
+    4300018: Rectangle02
+    4300020: dik01
+    4300022: Layer:yaz__01
+    4300024: Sphere01
+    4300026: Sphere02
+    4300028: Sphere04
+    4300030: Sphere03
+    4300032: Cylinder01
+    4300034: Line01
+    4300036: Rectangle01
+    4300038: Loft01
+    4300040: Box56
+    4300042: Box065
+    4300044: Box55
+    4300046: Box54
+    4300048: Box60
+    4300050: Box61
+    4300052: Box58
+    4300054: Text001
+    4300056: Box57
+    4300058: Box53
+    4300060: Box59
+    4300062: Line07
+    4300064: Box42
+    4300066: Box44
+    4300068: Box39
+    4300070: Box41
+    4300072: Box46
+    4300074: Box40
+    4300076: Box43
+    4300078: Box64
+    4300080: Line006
+    4300082: Box45
+    4300084: Box47
+    4300086: Box48
+    4300088: Box50
+    4300090: Box49
+    4300092: Box51
+    4300094: Line03
+    4300096: Box52
+    4300098: Line04
+    4300100: Line05
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
