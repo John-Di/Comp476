@@ -7,7 +7,7 @@ public class PathfindingAgent : MonoBehaviour {
 	
 	Vector3 curTarget;
 
-	TriangleNode startNode, endNode;
+	public TriangleNode startNode, endNode;
 
 	List<TriangleNode> pathList = new List<TriangleNode>();
 	List<TriangleNode> openList = new List<TriangleNode>();
@@ -60,7 +60,7 @@ public class PathfindingAgent : MonoBehaviour {
 			}
 		}
 
-		Draw();
+		//Draw();
 
 		//Current target is current node path being seeked
 		if(curTarget != target.transform.position)
@@ -191,22 +191,30 @@ public class PathfindingAgent : MonoBehaviour {
 
 	TriangleNode GetTriangleNode(Vector3 position)
 	{
-		position.y = 0;
 
 		//Check which triangle node the agent is standing on
-		Collider[] hitColliders = Physics.OverlapSphere(position, 1f, AI_Pathfinding.navigationMask);
-		if(hitColliders.Length == 0)
+//		Collider[] hitColliders = Physics.OverlapSphere(position, 1f, AI_Pathfinding.navigationMask);
+//		if(hitColliders.Length == 0)
+//		{
+//			hitColliders = Physics.OverlapSphere(position, 2f, AI_Pathfinding.navigationMask);
+//		}
+//		for(int i = 0; i < hitColliders.Length; i++)
+//		{
+//			if(!Physics.Linecast(position, hitColliders[i].transform.position, AI_Pathfinding.layoutMask))
+//			{
+//				TriangleNode n = hitColliders[i].GetComponentInParent<TriangleNode> ();
+//				if(n != null)
+//					return n;
+//			}
+//		}
+//
+		position.y = 10;
+		Vector3 under = new Vector3 (position.x, -10f, position.z);
+
+		RaycastHit hit;
+		if(Physics.Raycast (position, (under - position), out hit, (under - position).magnitude, AI_Pathfinding.navigationMask))
 		{
-			hitColliders = Physics.OverlapSphere(position, 2f, AI_Pathfinding.navigationMask);
-		}
-		for(int i = 0; i < hitColliders.Length; i++)
-		{
-			if(!Physics.Linecast(position, hitColliders[i].transform.position, AI_Pathfinding.layoutMask))
-			{
-				TriangleNode n = hitColliders[i].GetComponentInParent<TriangleNode> ();
-				if(n != null)
-					return n;
-			}
+			return hit.collider.GetComponentInParent<TriangleNode>();
 		}
 
 		return startNode;

@@ -4,7 +4,7 @@ using System.Collections;
 public class CollisionAvoidance : MonoBehaviour {
 	public Vector3 target;
 
-	float repelForce = 50f;
+	float repelForce = 150f;
 	
 	float speed;
 

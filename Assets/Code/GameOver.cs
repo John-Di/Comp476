@@ -5,16 +5,18 @@ public class GameOver : MonoBehaviour
 {
 	float loadTime = 3f;
 
+	PlayerController player;
+
 	// Use this for initialization
 	void Start () 
 	{
-	
+		player = GetComponent<PlayerController> ();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if(gameObject.GetComponent<PlayerController>().anim.GetBool("isDead"))
+		if(player.anim.GetBool("isDead"))
 		{
 			loadTime -= Time.deltaTime;
 
