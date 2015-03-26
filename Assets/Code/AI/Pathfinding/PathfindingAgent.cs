@@ -343,11 +343,15 @@ public class PathfindingAgent : MonoBehaviour {
 			}
 		}
 
+		//Happens on some shap corners
+		if(outputPath.Count == 0)
+			return inputPath;
+
 		for(int i = (index + 1); i < inputPath.Count; i++)
 		{
 			outputPath.Add(inputPath[i]);
 		}
-		
+
 		return outputPath;
 	}
 }
