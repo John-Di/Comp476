@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
 	public float turnSpeed = 200f;
 	public float moveSpeed = 200f;
 	public float jumpForce = 100f;
-	
+	public Animator anim;
+
 	Transform head;
 	
 	float rotationX = 0;
@@ -15,14 +16,23 @@ public class PlayerController : MonoBehaviour
 	
 	void Awake()
 	{
+		anim = transform.GetChild(0).GetComponent<Animator>();
 		Screen.lockCursor = true;
-		head = transform.Find("Head").transform;
+		head = GameObject.Find("Head").transform;
 	}
 	
 	void Update()
 	{
-		UpdateRotation();
-		UpdateMovement();
+		if(!anim.GetBool("isDead"))
+		{
+			UpdateRotation();
+			UpdateMovement();
+		}
+		else
+		{			
+			rigidbody.velocity = Vector3.zero;
+			rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		}
 	}
 	
 	void UpdateRotation()
@@ -46,6 +56,11 @@ public class PlayerController : MonoBehaviour
 		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.right * axisX * moveSpeed * Time.deltaTime;
 		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.forward * axisZ * moveSpeed * Time.deltaTime;
 		rigidbody.velocity = speed;
+	}
+
+	public void Die()
+	{
+		anim.SetBool("isDead", true);
 	}
 }
 
