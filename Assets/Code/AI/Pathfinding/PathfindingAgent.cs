@@ -318,10 +318,6 @@ public class PathfindingAgent : MonoBehaviour {
 
 	List<Vector3> smoothPath(List<Vector3> inputPath)
 	{
-		//If there is only one node in the path, nothing to smooth
-		if(inputPath.Count <= 1)
-			return inputPath;
-
 		List<Vector3> outputPath = new List<Vector3> ();
 
 		int index = 0;
