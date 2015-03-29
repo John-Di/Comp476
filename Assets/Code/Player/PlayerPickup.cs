@@ -44,7 +44,7 @@ public class PlayerPickup : MonoBehaviour
 				if(hit.collider.tag == "Pickupable")
 				{
 					carrying = true;
-					hit.transform.position = hand.position;
+					//hit.transform.position = hand.position;
 					hit.transform.SetParent (hand);
 					hit.rigidbody.isKinematic = true;
 				}
