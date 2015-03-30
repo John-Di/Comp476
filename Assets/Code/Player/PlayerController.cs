@@ -7,31 +7,33 @@ public class PlayerController : MonoBehaviour
 	public float turnSpeed = 200f;
 	public float moveSpeed = 200f;
 	public float jumpForce = 100f;
-	public Animator anim;
+	public bool isGrounded = true;
 
 	Transform head;
 	
 	float rotationX = 0;
 	float rotationY = 0f;
-	
+
+	public int roomNumber = 0;
+
+	public Animator anim;
+
 	void Awake()
 	{
+<<<<<<< HEAD
 		anim = transform.GetChild(0).GetComponent<Animator>();
+=======
+>>>>>>> 0703058680b10b4d22c783821dd4b9aa63097ee7
 		Screen.lockCursor = true;
-		head = GameObject.Find("Head").transform;
+		head = transform.Find("Head").transform;
+		anim.enabled = false;
 	}
 	
 	void Update()
 	{
-		if(!anim.GetBool("isDead"))
-		{
-			UpdateRotation();
-			UpdateMovement();
-		}
-		else
-		{			
-			rigidbody.velocity = Vector3.zero;
-			rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		if (isGrounded) {
+			UpdateRotation ();
+			UpdateMovement ();
 		}
 	}
 	
@@ -58,9 +60,12 @@ public class PlayerController : MonoBehaviour
 		rigidbody.velocity = speed;
 	}
 
-	public void Die()
-	{
-		anim.SetBool("isDead", true);
+	public void SetRoomNumber(int room){
+		roomNumber = room;
+	}
+
+	public int GetRoomNumber(){
+		return roomNumber;
 	}
 }
 
