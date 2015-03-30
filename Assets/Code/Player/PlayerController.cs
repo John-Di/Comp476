@@ -16,10 +16,13 @@ public class PlayerController : MonoBehaviour
 
 	public int roomNumber = 0;
 
+	public Animator anim;
+
 	void Awake()
 	{
 		Screen.lockCursor = true;
 		head = transform.Find("Head").transform;
+		anim.enabled = false;
 	}
 	
 	void Update()
