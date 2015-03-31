@@ -3,12 +3,7 @@ using System.Collections;
 
 public class Trampoline : Trap {
 	public bool trapActive;
-
-		// Use this for initialization
-	void Start () {
 	
-	}
-
 	void Update(){
 		trapActive = isTrapEnabled;
 	}
@@ -16,7 +11,7 @@ public class Trampoline : Trap {
 	void OnTriggerEnter(Collider other){
 		if (this.isTrapEnabled) {
 			if (other.gameObject.CompareTag("Player")) {
-				//pc.isGrounded = false;
+				Debug.Log("BLARGE");
 				other.gameObject.rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY 
 					| RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 				other.gameObject.rigidbody.AddForce(Vector3.up * 500f);
@@ -29,7 +24,6 @@ public class Trampoline : Trap {
 
 	IEnumerator RegainControl(){
 		yield return new WaitForSeconds(2f);
-	//	pc.isGrounded= true;
 		player.rigidbody.constraints = RigidbodyConstraints.None;
 		yield return new WaitForSeconds (5f);
 		EnableTrap ();
