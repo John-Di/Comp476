@@ -20,10 +20,7 @@ public class PlayerController : MonoBehaviour
 
 	void Awake()
 	{
-<<<<<<< HEAD
 		anim = transform.GetChild(0).GetComponent<Animator>();
-=======
->>>>>>> 0703058680b10b4d22c783821dd4b9aa63097ee7
 		Screen.lockCursor = true;
 		head = transform.Find("Head").transform;
 		anim.enabled = false;
@@ -31,7 +28,8 @@ public class PlayerController : MonoBehaviour
 	
 	void Update()
 	{
-		if (isGrounded) {
+		if (isGrounded) 
+		{
 			UpdateRotation ();
 			UpdateMovement ();
 		}
