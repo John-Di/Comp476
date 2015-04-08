@@ -25,7 +25,6 @@ public class EnemyThrow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (playerInRange) {
-			Debug.Log ("FUCK MY ASSSSSSSSSS");
 			direction = (player.transform.position - transform.position);
 			Quaternion rotation = Quaternion.LookRotation(direction);
 			Quaternion currentRot = transform.localRotation;
