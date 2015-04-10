@@ -18,15 +18,6 @@ public class Flashlight : MonoBehaviour
 	{
 		RaycastHit hit;
 
-//		if (Physics.Raycast (transform.position, transform.forward, out hit, 0.5f)) 
-//		{
-//			transform.position = transform.parent.position + transform.parent.forward * (3.25f - 1.5f * hit.distance);
-//		}/*
-//		else
-//		{
-//			transform.position = transform.parent.position + transform.parent.forward * 3.25f;
-//		}*/
-
 		if(Input.GetButtonDown("Fire1"))
 		{
 			flashlight.intensity += MAX_INTENSITY;			
