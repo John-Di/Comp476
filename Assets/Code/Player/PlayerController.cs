@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
 	public int roomNumber = 0;
 
-	Animator anim;
+	public Animator anim;
 
 	void Awake()
 	{
