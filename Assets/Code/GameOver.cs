@@ -20,7 +20,6 @@ public class GameOver : MonoBehaviour
 			
 			if(loadTime <= 0f)
 			{
-				gameObject.GetComponent<PlayerController>().anim.SetBool("isDead", false);		
 				Screen.lockCursor = false;
 				Application.LoadLevel ("Game Over");
 			}
