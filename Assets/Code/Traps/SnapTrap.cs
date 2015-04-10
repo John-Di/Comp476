@@ -21,6 +21,7 @@ public class SnapTrap : Trap {
 		Quaternion currentRot = transform.localRotation;
 		
 		transform.localRotation = Quaternion.Slerp(currentRot, rotation, Time.deltaTime * 5.0f);
+
 	}
 
 	IEnumerator RegainControl(){
