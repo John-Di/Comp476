@@ -13,7 +13,7 @@ public class FakeExitTrap : Trap {
 	}
 
 	void FixedUpdate(){
-		enemy = GameObject.FindGameObjectWithTag ("Oogie");
+		//enemy = GameObject.FindGameObjectWithTag ("Oogie");
 	}
 
 	void OnTriggerEnter(Collider other){
