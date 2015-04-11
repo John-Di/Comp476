@@ -11,6 +11,7 @@ public class WarpZone : Trap {
 			if (other.gameObject == player) {
 				player.transform.position = new Vector3(exit.transform.position.x, player.transform.position.y, exit.transform.position.z);
 				DisableTrap();
+				Destroy(gameObject, 2f);
 			}
 		}
 	}
