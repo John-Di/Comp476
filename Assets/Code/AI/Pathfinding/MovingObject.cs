@@ -33,13 +33,18 @@ public class MovingObject : MonoBehaviour {
 		curPos = transform.position;
 		if(curPos != lastPos)
 		{
+			print ("curPos: " + curPos);
+			print("lastPos: " + lastPos);
 			hasMoved = true;
 		}
 		else if(hasMoved)
 		{
+			print("MovedAndStopped");
 			obstacleMovedStopped = true;
 			hasMoved = false;
 		}
+		//else
+		//	print ("Not moving");
 		lastPos = curPos;
 		
 		moveStopped = obstacleMovedStopped;
@@ -52,8 +57,8 @@ public class MovingObject : MonoBehaviour {
 		//First check what colliders are hitting based on the radius
 		for(int i = 0; i < hitColliders.Length; i++)
 		{
-			//Then for each collider check if the renderer bounds intersects
-			if(renderer.bounds.Intersects(hitColliders[i].renderer.bounds))
+			//Then for each collider check if the collider bounds intersects
+			if(collider.bounds.Intersects(hitColliders[i].collider.bounds))
 			{
 				//Store the orientation of each collider
 				Vector3 vHit1 = hitColliders[i].transform.position + (hitColliders[i].transform.localScale.x / 2) * (Quaternion.AngleAxis(90, Vector3.up) * hitColliders[i].transform.forward);

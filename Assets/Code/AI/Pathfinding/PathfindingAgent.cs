@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 public class PathfindingAgent : MonoBehaviour {
 	public Transform target;
+	public float radius = 1f;
 	
 	Vector3 curTarget;
-
+	
 	public TriangleNode startNode, endNode;
-
+	
 	List<TriangleNode> pathList = new List<TriangleNode>();
 	List<TriangleNode> openList = new List<TriangleNode>();
 	List<TriangleNode> closedList = new List<TriangleNode>();
@@ -17,18 +18,20 @@ public class PathfindingAgent : MonoBehaviour {
 	//Keep track of node with the lowest EstimatedDistanceToEnd for unreachable endNodes
 	TriangleNode smallestHeuristicNode;
 	bool unreachablePath = false;
-
+	
 	AIMovement movement;
 	CollisionAvoidance avoid;
 	
 	Vector3 curPos, lastPos;
 	bool targetMoved = false;
 	float lastMoveTime = 0f, tryTime = 0f;
-
+	
 	MovingObject lastObstacle;
-
+	
 	bool hasInit = false;
-
+	
+	Vector3 posX1, posX2;
+	
 	// Use this for initialization
 	void Start () {
 		movement = GetComponent<AIMovement> ();
@@ -37,11 +40,14 @@ public class PathfindingAgent : MonoBehaviour {
 		pathVertices.Add (transform.position);
 		tryTime = Random.Range(1f, 2f);
 	}
-
+	
 	// Update is called once per frame
 	void Update () {
+		posX1 = transform.position + Quaternion.AngleAxis(90, Vector3.up) * transform.forward * radius;
+		posX2 = transform.position + Quaternion.AngleAxis (-90, Vector3.up) * transform.forward * radius;
+		
 		//If target is reachable make it the current target
-		if(!Physics.Linecast(transform.position, target.transform.position, AI_Pathfinding.layoutMask))
+		if(!Physics.Linecast (posX1, target.transform.position, AI_Pathfinding.layoutMask) && !Physics.Linecast (posX2, target.transform.position, AI_Pathfinding.layoutMask))
 		{
 			curTarget = target.transform.position;
 			pathVertices.Add(curTarget);
@@ -59,15 +65,17 @@ public class PathfindingAgent : MonoBehaviour {
 				return;
 			}
 		}
-
-		//Draw();
-
+		
+		Draw();
+		Debug.DrawLine (posX1, curTarget, Color.red);
+		Debug.DrawLine (posX2, curTarget, Color.red);
+		
 		//Current target is current node path being seeked
 		if(curTarget != target.transform.position)
 			curTarget = movement.target;
 		if(avoid.enabled)
 			avoid.target = curTarget;
-
+		
 		RaycastHit hit;
 		//Check for collisions with dynamic obstacles (e.g. doors)
 		if(Physics.Raycast (transform.position, (curTarget - transform.position), out hit, (curTarget - transform.position).magnitude, AI_Pathfinding.movingMask))
@@ -95,23 +103,23 @@ public class PathfindingAgent : MonoBehaviour {
 				return;
 			}
 		}
-
+		
 		//Smooth path by cutting unecessary nodes from the path as the agent travels the nodes
 		pathVertices = smoothPath(pathVertices);
 		//Update the path to seek
 		if(movement.path != pathVertices)
 			movement.UpdatePath (pathVertices);
 	}
-
+	
 	bool ObstacleMoved()
 	{
 		//Check if last obstacle recorded has moved (e.g. a door that was just closed has opened)
 		if(lastObstacle != null)
 			return lastObstacle.moveStopped;
-
+		
 		return false;
 	}
-
+	
 	bool TargetMoved()
 	{
 		//Check if the target has moved
@@ -129,7 +137,7 @@ public class PathfindingAgent : MonoBehaviour {
 			targetMoved = false;
 		}
 		lastPos = curPos;
-
+		
 		if((unreachablePath && lastMoveTime < tryTime) || !Physics.Linecast(pathVertices[pathVertices.Count - 1], curPos, AI_Pathfinding.layoutMask))
 			targetMovedStopped = false;
 		else if(targetMovedStopped)
@@ -137,7 +145,7 @@ public class PathfindingAgent : MonoBehaviour {
 		
 		return targetMovedStopped;
 	}
-
+	
 	void Draw()
 	{
 		//Path
@@ -145,19 +153,19 @@ public class PathfindingAgent : MonoBehaviour {
 		{
 			Debug.DrawLine(pathVertices[i], pathVertices[i + 1], Color.green);
 		}
-
+		
 		//Fill
-//		foreach(TriangleNode node in openList)
-//		{
-//			node.draw(Color.yellow);
-//		}
-//
-//		foreach(TriangleNode node in closedList)
-//		{
-//			node.draw(Color.yellow);
-//		}
+		//		foreach(TriangleNode node in openList)
+		//		{
+		//			node.draw(Color.yellow);
+		//		}
+		//
+		//		foreach(TriangleNode node in closedList)
+		//		{
+		//			node.draw(Color.yellow);
+		//		}
 	}
-
+	
 	public void UpdatePath()
 	{
 		//Initialize the start and end node to be the triangle area over which the agent is standing
@@ -178,48 +186,31 @@ public class PathfindingAgent : MonoBehaviour {
 		unreachablePath = false;
 		//Calculate path
 		calculateAStarEuclideanDistance ();
-
+		
 		//Convert the pathlist of triangle nodes to a list of Vector3 positions to seek
 		for(int i = 0; i < pathList.Count; i++)
 		{
 			pathVertices.Add(pathList[i].nodePosition);
 		}
-
+		
 		pathVertices = smoothPath(pathVertices);
 		movement.UpdatePath (pathVertices);
 	}
-
+	
 	TriangleNode GetTriangleNode(Vector3 position)
 	{
-
-		//Check which triangle node the agent is standing on
-//		Collider[] hitColliders = Physics.OverlapSphere(position, 1f, AI_Pathfinding.navigationMask);
-//		if(hitColliders.Length == 0)
-//		{
-//			hitColliders = Physics.OverlapSphere(position, 2f, AI_Pathfinding.navigationMask);
-//		}
-//		for(int i = 0; i < hitColliders.Length; i++)
-//		{
-//			if(!Physics.Linecast(position, hitColliders[i].transform.position, AI_Pathfinding.layoutMask))
-//			{
-//				TriangleNode n = hitColliders[i].GetComponentInParent<TriangleNode> ();
-//				if(n != null)
-//					return n;
-//			}
-//		}
-//
 		position.y = 10;
 		Vector3 under = new Vector3 (position.x, -10f, position.z);
-
+		
 		RaycastHit hit;
 		if(Physics.Raycast (position, (under - position), out hit, (under - position).magnitude, AI_Pathfinding.navigationMask))
 		{
 			return hit.collider.GetComponentInParent<TriangleNode>();
 		}
-
+		
 		return startNode;
 	}
-
+	
 	//AStarEuclideanDistance visit node
 	bool visitNode_AStarEuclideanDistance(TriangleNode node) {
 		for (int i = 0; i < node.neighborList.Count; i++) {
@@ -236,7 +227,7 @@ public class PathfindingAgent : MonoBehaviour {
 						nextNode.nodePosition = nextNode.GetClosestPointInTriangle(node.nodePosition);
 					}
 				}
-
+				
 				//Check for collisions with moving objects, if a door was closed for example
 				RaycastHit hit;
 				if(Physics.Raycast (node.nodePosition, (nextNode.nodePosition - node.nodePosition), out hit, (nextNode.nodePosition - node.nodePosition).magnitude, AI_Pathfinding.movingMask))
@@ -248,7 +239,7 @@ public class PathfindingAgent : MonoBehaviour {
 						continue;
 					}
 				}
-
+				
 				//Distance between current node and neighbor
 				float newCostSoFar = node.costSoFar + (nextNode.nodePosition - node.nodePosition).magnitude;
 				
@@ -271,12 +262,12 @@ public class PathfindingAgent : MonoBehaviour {
 					nextNode.UpdateCostSoFar(newCostSoFar);
 					//Heuristic value is euclidean distance from node to end node
 					nextNode.UpdateHeuristic((endNode.nodePosition - nextNode.nodePosition).magnitude);
-
+					
 					if(smallestHeuristicNode.heuristicValue > nextNode.heuristicValue)
 					{
 						smallestHeuristicNode = nextNode;
 					}
-
+					
 					openList.Add (nextNode);
 				}
 				
@@ -292,11 +283,11 @@ public class PathfindingAgent : MonoBehaviour {
 		openList.Sort (comparer);
 		return true;
 	}
-
+	
 	//AStarEuclideanDistance algorithm
 	void calculateAStarEuclideanDistance() {
 		openList.Add (startNode);
-
+		
 		//Loop through the nodes until endNode is found or endNode is in unreacheable closed room
 		while (openList[0] != endNode)
 		{
@@ -307,11 +298,11 @@ public class PathfindingAgent : MonoBehaviour {
 				break;
 			}
 		}
-
+		
 		pathList.Add (openList [0]);
 		if(openList[0] == startNode)
 			return;
-
+		
 		while(true) {
 			if (pathList[pathList.Count - 1].prevNode == startNode) {
 				pathList.Add (pathList[pathList.Count - 1].prevNode);
@@ -323,16 +314,16 @@ public class PathfindingAgent : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	List<Vector3> smoothPath(List<Vector3> inputPath)
 	{
 		List<Vector3> outputPath = new List<Vector3> ();
-
+		
 		int index = 0;
 		//Check from the endNode of the inputPath the first visible node
 		for(int i = inputPath.Count - 1; i >= 0; i--)
 		{
-			if(!Physics.Linecast (transform.position, inputPath[i], AI_Pathfinding.layoutMask))
+			if(!Physics.Linecast (posX1, inputPath[i], AI_Pathfinding.layoutMask) && !Physics.Linecast (posX2, inputPath[i], AI_Pathfinding.layoutMask))
 			{
 				RaycastHit hit;
 				//Since smoothing happens every frame, check to avoid going to a blocked off path.
@@ -350,16 +341,16 @@ public class PathfindingAgent : MonoBehaviour {
 				break;
 			}
 		}
-
+		
 		//Happens on some shap corners
 		if(outputPath.Count == 0)
 			return inputPath;
-
+		
 		for(int i = (index + 1); i < inputPath.Count; i++)
 		{
 			outputPath.Add(inputPath[i]);
 		}
-
+		
 		return outputPath;
 	}
 }
