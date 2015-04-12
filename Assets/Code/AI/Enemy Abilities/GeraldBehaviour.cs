@@ -6,16 +6,12 @@ public class GeraldBehaviour : MonoBehaviour
 	GameObject[] geraldWaypoints;
 	PathfindingAgent pa;
 	int randomTarget;
-	Vector3 geraldZinWaypointSpace;
 
-	// Use this for initialization
+	public int roomNumber;
+	
 	void Awake ()
 	{
 		pa = GetComponent<PathfindingAgent>();
-	}
-
-	void Start()
-	{
 		geraldWaypoints = GameObject.FindGameObjectsWithTag ("GeraldWaypoint");
 		NewWaypoint ();
 	}
@@ -26,12 +22,14 @@ public class GeraldBehaviour : MonoBehaviour
 		CheckLocation ();
 	}
 
+	// Get a new waypoint
 	void NewWaypoint()
 	{
 		randomTarget = Random.Range (0, geraldWaypoints.Length);
 		pa.target = geraldWaypoints[randomTarget].transform;
 	}
 
+	// Selects new target when it reaches the current target
 	void CheckLocation()
 	{
 		if(Vector3.Distance (pa.target.position, transform.position) <= 0.1f)
@@ -39,5 +37,15 @@ public class GeraldBehaviour : MonoBehaviour
 			Debug.Log ("Reached target");
 			NewWaypoint ();
 		}
+	}
+
+	public void SetRoomNumber(int room)
+	{
+		roomNumber = room;
+	}
+	
+	public int GetRoomNumber()
+	{
+		return roomNumber;
 	}
 }
