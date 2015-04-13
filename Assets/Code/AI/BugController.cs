@@ -25,6 +25,9 @@ public class BugController : MonoBehaviour {
 
 	Transform currentNodePosition;
 
+	public AudioSource bugKill;
+	public static bool alreadyPlayed = false;
+
 	public State state{
 		get{
 			return bugState;
@@ -202,6 +205,10 @@ public class BugController : MonoBehaviour {
 			ExitState(bugState);
 			bugState = State.Rest;
 			EnterState(bugState);
+
+			if(!alreadyPlayed){
+				bugKill.Play();
+			}
 		}
 
 		if (currentNodePosition != null && bugState == State.Surround) {

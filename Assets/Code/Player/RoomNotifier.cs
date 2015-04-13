@@ -39,8 +39,8 @@ public class RoomNotifier : MonoBehaviour {
 					break;
 				case "Room33":
 					if(currentRoomNumber != 33){
-						pc.SetRoomNumber(33);
-					bc.ForEach(b => {b.PlayerChangedRooms(33);});
+						pc.SetRoomNumber(1);
+						bc.ForEach(b => {b.PlayerChangedRooms(1);});
 					}
 					break;
 				case "Room34":
