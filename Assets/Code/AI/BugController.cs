@@ -41,7 +41,7 @@ public class BugController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-
+		//Physics.IgnoreLayerCollision (11, 11, true); //Add this until john get's the flocking working
 
 		pc = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 
@@ -140,7 +140,7 @@ public class BugController : MonoBehaviour {
 
 	void SurroundPlayer(){
 		//change State to FindPlayer
-		int random = Random.Range (1, currentWaypointList.Count);
+		int random = Random.Range (0, currentWaypointList.Count);
 		currentNodePosition = currentWaypointList [random].transform;
 		if(this.groupNumber == 1){
 			this.GetComponent<AIMovement>().enabled = true;
@@ -197,7 +197,6 @@ public class BugController : MonoBehaviour {
 			}
 		}
 	}
-
 
 	void OnTriggerEnter(Collider other){
 		if (other.CompareTag("Player")) {
