@@ -43,7 +43,7 @@ public class Alignment : FlockingBehaviour
 				{
 					neighbours.Add(bug);
 				}
-			}			
+			}					n = neighbours.Count;	
 			
 			return neighbours;
 		}

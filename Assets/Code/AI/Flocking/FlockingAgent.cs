@@ -10,8 +10,6 @@ public sealed class FlockingAgent : MonoBehaviour
 	
 	public Vector3 Velocity { get; private set; }
 	public float AngularVelocity { get; private set; }
-
-	public Transform leader;
 	
 	List<FlockingBehaviour> behaviours;
 	
@@ -38,15 +36,14 @@ public sealed class FlockingAgent : MonoBehaviour
 	{
 		foreach(FlockingBehaviour b in behaviours)
 		{
-			Velocity += b.Acceleration * deltaTime * 0.1f;
+			Velocity += b.Acceleration * deltaTime;
 		}
 
-		Velocity += leader.GetComponent<AIMovement>().velocity * deltaTime * 0.9f;
+		Velocity += GetComponent<AIMovement>().velocity * 0.25f;
 
 		Velocity = (Velocity.magnitude < MaxVelocity) ? Velocity : Velocity.normalized * MaxVelocity;
 		
-		Velocity = new Vector3(Velocity.x, 0.0f, Velocity.z);
-		
+		Velocity = new Vector3(Velocity.x, 0.0f, Velocity.z);		
 	}
 	
 	private void UpdatePosition(float deltaTime)

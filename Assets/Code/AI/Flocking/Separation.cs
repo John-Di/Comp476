@@ -35,12 +35,30 @@ public class Separation : FlockingBehaviour
 		get
 		{			
 			List<GameObject> neighbours = new List<GameObject>();
-			
+
+			List<GameObject> enemies = new List<GameObject>();
+
+
+			if(GameObject.Find("Oogie") != null)
+			{
+				enemies.Add(GameObject.Find("Oogie"));
+			}
+
+			if(GameObject.Find("Mr. Gerald") != null)
+			{
+				enemies.Add(GameObject.Find("Mr. Gerald"));
+			}
+
 			foreach(GameObject bug in GameObject.FindGameObjectsWithTag(tag))
 			{
-				if((bug.transform.position - transform.position).magnitude <= radius)
+				enemies.Add(bug);
+			}
+
+			foreach(GameObject e in enemies)
+			{
+				if((e.transform.position - transform.position).magnitude <= radius)
 				{
-					neighbours.Add(bug);
+					neighbours.Add(e);
 				}
 			}			n = neighbours.Count;			
 			
