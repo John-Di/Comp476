@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyThrow : MonoBehaviour {
+public class EnemyThrow : MonoBehaviour
+{
 	GameObject player;
 	private SphereCollider col;
 	public bool playerInRange = false;
@@ -12,19 +13,26 @@ public class EnemyThrow : MonoBehaviour {
 
 	public GameObject projectile;
 	private float shotInterval;
-	private float resetShotInterval = 1.5f;
+	private float resetShotInterval = 4f;
+
+	private AIMovement movement;
 
 	// Use this for initialization
-	void Awake () {
+	void Awake ()
+	{
 		player = GameObject.FindGameObjectWithTag ("Player");
+		movement = GetComponent<AIMovement>();
 		col = GetComponent<SphereCollider> ();
 
-		shotInterval = resetShotInterval;
+		shotInterval = 0;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (playerInRange) {
+	void Update ()
+	{
+		if (playerInRange)
+		{
+			movement.MaxVelocity = 0.0f;
 			direction = (player.transform.position - transform.position);
 			Quaternion rotation = Quaternion.LookRotation(direction);
 			Quaternion currentRot = transform.localRotation;
@@ -37,29 +45,38 @@ public class EnemyThrow : MonoBehaviour {
 				playerInFieldOfView = true;
 				//Fire Projectile
 				shotInterval -= Time.deltaTime;
-				if(shotInterval < 0){
+				if(shotInterval <= 0){
 					shotInterval = resetShotInterval;
 					ThrowAttack();
 				}
 			}
 		}
+		else
+		{
+			movement.MaxVelocity = 2.0f;
+		}
 	}
 
-	void OnTriggerStay(Collider other){
-		if (other.gameObject == player) {
+	void OnTriggerStay(Collider other)
+	{
+		if (other.gameObject == player)
+		{
 			playerInRange = true;
 		}
 	}
 
-	void OnTriggerExit(Collider other){
-		if (other.gameObject == player) {
+	void OnTriggerExit(Collider other)
+	{
+		if (other.gameObject == player)
+		{
 			playerInRange = false;
 			playerInFieldOfView = false;
 		}
 	}
 
-	void ThrowAttack(){
+	void ThrowAttack()
+	{
 		GameObject attack = (GameObject) Instantiate (projectile, transform.GetChild(0).transform.position, Quaternion.identity);
-		attack.rigidbody.AddForce(transform.forward * 100f);
+		attack.rigidbody.AddForce(transform.forward * 200f);
 	}
 }

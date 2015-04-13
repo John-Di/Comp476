@@ -62,11 +62,13 @@ public class PlayerController : MonoBehaviour
 		rigidbody.velocity = speed;
 	}
 
-	public void SetRoomNumber(int room){
+	public void SetRoomNumber(int room)
+	{
 		roomNumber = room;
 	}
 
-	public int GetRoomNumber(){
+	public int GetRoomNumber()
+	{
 		return roomNumber;
 	}
 	
@@ -74,5 +76,20 @@ public class PlayerController : MonoBehaviour
 	{
 		anim.SetBool("isDead", true);
 	}
-}
 
+	void OnCollisionEnter(Collision other)
+	{
+		if(other.collider.CompareTag("Gerald"))
+		{
+			Die ();
+		}
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		if(other.CompareTag ("Fireball"))
+		{
+			Die ();
+		}
+	}
+}
