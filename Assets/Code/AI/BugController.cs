@@ -41,7 +41,7 @@ public class BugController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		//Physics.IgnoreLayerCollision (11, 11, true); //Add this until john get's the flocking working
+		Physics.IgnoreLayerCollision (11, 11, true); //Add this until john get's the flocking working
 
 		pc = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 
