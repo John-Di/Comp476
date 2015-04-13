@@ -6,7 +6,7 @@ public class AIMovement : MonoBehaviour
 {
 	//private float timeStuck = 0.0f;	
 	public float wanderDistance = 0.02f, wanderRadius = 0.005f, updateRange= 0.015f;
-	public float MaxVelocity = 0.1f, MaxAcceleration = 3f;
+	public float MaxVelocity = 0.01f, MaxAcceleration = 3f;
 	public Vector3 target;
 	public Vector3 velocity;
 
@@ -132,6 +132,3 @@ public class AIMovement : MonoBehaviour
 		velocity = vel;
 	}
 }
-
-
-
