@@ -14,22 +14,38 @@ Platform assembly: C:\Users\Lee\Documents\GitHub\Comp476\Rerum et Monstrum_Data\
 Loading C:\Users\Lee\Documents\GitHub\Comp476\Rerum et Monstrum_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
 Platform assembly: C:\Users\Lee\Documents\GitHub\Comp476\Rerum et Monstrum_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading C:\Users\Lee\Documents\GitHub\Comp476\Rerum et Monstrum_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.053 seconds
+- Completed reload, in  0.057 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 XInput1_3.dll not found.
 <RI> Input initialized.
 Platform assembly: C:\Users\Lee\Documents\GitHub\Comp476\Rerum et Monstrum_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Lee\Documents\GitHub\Comp476\Rerum et Monstrum_Data\Managed\System.dll (this message is harmless)
-UnloadTime: 3.295863 ms
+UnloadTime: 3.253209 ms
 Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
 Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 5286.
-Total: 1.202757 ms (FindLiveObjects: 0.283973 ms CreateObjectMapping: 0.036889 ms MarkObjects: 0.427689 ms  DeleteObjects: 0.048417 ms)
+Total: 1.383363 ms (FindLiveObjects: 0.349299 ms CreateObjectMapping: 0.056487 ms MarkObjects: 0.434606 ms  DeleteObjects: 0.059177 ms)
 
-UnloadTime: 44.657661 ms
+Player Entered TRAP
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Player Exited TRAP
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+BLARGE
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Reached target
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+UnloadTime: 22.960758 ms
 Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
 
-Unloading 1708 unused Assets to reduce memory usage. Loaded Objects now: 217.
-Total: 17.018829 ms (FindLiveObjects: 0.112206 ms CreateObjectMapping: 0.372739 ms MarkObjects: 2.173417 ms  DeleteObjects: 13.656872 ms)
+Unloading 1709 unused Assets to reduce memory usage. Loaded Objects now: 217.
+Total: 10.900135 ms (FindLiveObjects: 0.063404 ms CreateObjectMapping: 0.200203 ms MarkObjects: 1.130515 ms  DeleteObjects: 9.112522 ms)
 
