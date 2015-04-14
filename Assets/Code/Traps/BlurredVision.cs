@@ -14,13 +14,13 @@ public class BlurredVision : Trap {
 	}
 
 	void MakeDark(){
-		//RenderSettings.ambientLight = ConvertColor (0, 0, 0);;
-		GameObject.Find ("Flashlight").GetComponent<Light>().range /= 2f;
+		RenderSettings.ambientLight = ConvertColor (0, 0, 0);;
+		//GameObject.Find ("Flashlight").GetComponent<Light>().range /= 2f;
 	}
 
 	void ReturnVision(){
-		//RenderSettings.ambientLight = ConvertColor (51, 51, 51);
-		GameObject.Find ("Flashlight").GetComponent<Light>().range *= 2f;
+		RenderSettings.ambientLight = ConvertColor (51, 51, 51);
+		//GameObject.Find ("Flashlight").GetComponent<Light>().range *= 2f;
 	}
 
 	Color ConvertColor(int r, int g, int b){

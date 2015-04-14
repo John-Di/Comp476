@@ -77,6 +77,6 @@ public class EnemyThrow : MonoBehaviour
 	void ThrowAttack()
 	{
 		GameObject attack = (GameObject) Instantiate (projectile, transform.GetChild(0).transform.position, Quaternion.identity);
-		attack.rigidbody.AddForce(transform.forward * 200f);
+		attack.rigidbody.AddForce(transform.forward * 400f);
 	}
 }

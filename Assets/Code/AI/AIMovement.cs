@@ -6,9 +6,9 @@ public class AIMovement : MonoBehaviour
 {
 	//private float timeStuck = 0.0f;	
 	public float wanderDistance = 0.02f, wanderRadius = 0.005f, updateRange= 0.015f;
-	public float MaxVelocity = 0.1f, MaxAcceleration = 3f;
+	public float MaxVelocity = 0.01f, MaxAcceleration = 3f;
 	public Vector3 target;
-	Vector3 velocity;
+	public Vector3 velocity;
 
 	public List<Vector3> path;
 	bool halt;
@@ -74,7 +74,7 @@ public class AIMovement : MonoBehaviour
 			velocity = Vector3.zero;
 			path = new List<Vector3>();
 		}
-		
+
 		velocity = velocity.normalized * MaxVelocity;
 		velocity = new Vector3(velocity.x, transform.forward.y, velocity.z);					
 		velocity = (velocity.magnitude < MaxVelocity) ? velocity : velocity.normalized * MaxVelocity;
@@ -155,6 +155,3 @@ public class AIMovement : MonoBehaviour
 		velocity = vel;
 	}
 }
-
-
-
