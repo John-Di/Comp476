@@ -12,9 +12,13 @@ public class AIMovement : MonoBehaviour
 
 	public List<Vector3> path;
 	bool halt;
+	bool reposition = false;
+
+	PathfindingAgent agent;
 
 	void Start()
 	{
+		agent = GetComponent<PathfindingAgent> ();
 		halt = false;
 		velocity = Vector3.zero;
 		path = new List<Vector3>();
@@ -26,6 +30,7 @@ public class AIMovement : MonoBehaviour
 		UpdateTarget();
 		UpdateRotation(Time.deltaTime);
 		UpdateVelocities(Time.deltaTime);
+		UpdateReposition ();
 
 		if(Vector3.Angle (velocity, transform.forward) < 45f || direction.magnitude <= 5f)
 		{
@@ -40,7 +45,8 @@ public class AIMovement : MonoBehaviour
 	
 	private void UpdateTarget()
 	{
-		if(path.Count > 0 && Vector3.Distance(transform.position, target) <= 0.5f)
+		Vector2 posDiff = new Vector2(target.x - transform.position.x, target.z - transform.position.z);
+		if(path.Count > 0 && posDiff.magnitude <= 0.5f)
 		{
 			target = path[0];
 			path.Remove(target);
@@ -54,7 +60,8 @@ public class AIMovement : MonoBehaviour
 	
 	private void UpdateVelocities(float deltaTime)
 	{	
-		halt = (path.Count == 0 && Vector3.Distance(transform.position, target) <= 0.1f);
+		Vector2 posDiff = new Vector2(target.x - transform.position.x, target.z - transform.position.z);
+		halt = (path.Count == 0 && posDiff.magnitude <= 0.1f);
 		
 		if(!halt)
 		{
@@ -76,9 +83,9 @@ public class AIMovement : MonoBehaviour
 	
 	private void UpdatePosition(float deltaTime)
 	{
-		//Vector2 posDiff = new Vector2(target.x - transform.position.x, target.z - transform.position.z);
+		Vector2 posDiff = new Vector2(target.x - transform.position.x, target.z - transform.position.z);
 		
-		if(target == null || Vector3.Distance(transform.position, target) > 0.1f)
+		if(target == null || posDiff.magnitude > 0.1f)
 		{
 			transform.position += velocity * deltaTime;
 		}
@@ -122,6 +129,22 @@ public class AIMovement : MonoBehaviour
 	public void AddToPath(Vector3 p)
 	{
 		path.Add(p);
+	}
+
+	public void UpdateReposition()
+	{
+		if(reposition && halt)
+		{
+			reposition = false;
+			agent.pathVertices = agent.smoothPath(agent.pathVertices);
+			UpdatePath(agent.pathVertices);
+		}
+	}
+
+	public void Reposition(Vector3 p)
+	{
+		UpdatePath (p);
+		reposition = true;
 	}
 
 	private void Seek()

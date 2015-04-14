@@ -7,7 +7,7 @@ public class Ghost : Trap
 
 	// Use this for initialization
 	void Start () {
-	
+		fearValue = 0.1f;
 	}
 	
 	// Update is called once per frame
@@ -20,6 +20,7 @@ public class Ghost : Trap
 		if (this.isTrapEnabled) {
 			if (coll.tag == "Player") {
 				if (!scream.isPlaying) {
+					coll.gameObject.GetComponent<PlayerController>().fearLevel += fearValue;
 					scream.Play ();
 					DisableTrap();
 				}

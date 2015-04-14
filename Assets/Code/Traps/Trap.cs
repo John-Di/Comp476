@@ -8,6 +8,8 @@ public class Trap : MonoBehaviour {
 	protected GameObject player;
 	protected PlayerController pc;
 
+	protected float fearValue;
+
 	void Awake(){
 		player = GameObject.FindGameObjectWithTag ("Player");
 		pc = player.GetComponent<PlayerController> ();

@@ -3,7 +3,12 @@ using System.Collections;
 
 public class Trampoline : Trap {
 	public bool trapActive;
-	
+
+	void Start()
+	{
+		fearValue = 0.05f;
+	}
+
 	void Update(){
 		trapActive = isTrapEnabled;
 	}
@@ -12,6 +17,7 @@ public class Trampoline : Trap {
 		if (this.isTrapEnabled) {
 			if (other.gameObject.CompareTag("Player")) {
 				Debug.Log("BLARGE");
+				other.gameObject.GetComponent<PlayerController>().fearLevel += fearValue;
 				other.gameObject.rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY 
 					| RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 				other.gameObject.rigidbody.AddForce(Vector3.up * 500f);

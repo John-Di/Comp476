@@ -24,6 +24,7 @@ public class CollisionAvoidance : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		rigidbody.isKinematic = true;
 		Vector3 direction = (target - transform.position).normalized;
 
 		//Is the target reachable? i.e. the obstacle was avoided
@@ -31,6 +32,7 @@ public class CollisionAvoidance : MonoBehaviour {
 		{
 			movement.enabled = true;
 			enabled = false;
+			rigidbody.isKinematic = false;
 			return;
 		}
 
@@ -47,6 +49,7 @@ public class CollisionAvoidance : MonoBehaviour {
 				agent.UpdatePath();
 				movement.enabled = true;
 				enabled = false;
+				rigidbody.isKinematic = false;
 				return;
 			}
 		}

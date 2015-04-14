@@ -13,7 +13,7 @@ public class EnemyThrow : MonoBehaviour
 
 	public GameObject projectile;
 	private float shotInterval;
-	private float resetShotInterval = 4f;
+	private float resetShotInterval = 3f;
 
 	private AIMovement movement;
 

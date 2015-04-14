@@ -26,6 +26,11 @@ public class MovingObject : MonoBehaviour {
 			UpdateIsBlocking();
 	}
 
+	public void SetMoved(bool b)
+	{
+		moveStopped = b;
+	}
+
 	void UpdateHasMoved()
 	{
 		//Check if last obstacle recorded has moved (e.g. a door that was just closed has opened)
@@ -33,24 +38,19 @@ public class MovingObject : MonoBehaviour {
 		curPos = transform.position;
 		if(curPos != lastPos)
 		{
-			print ("curPos: " + curPos);
-			print("lastPos: " + lastPos);
 			hasMoved = true;
 		}
 		else if(hasMoved)
 		{
-			print("MovedAndStopped");
 			obstacleMovedStopped = true;
 			hasMoved = false;
 		}
-		//else
-		//	print ("Not moving");
 		lastPos = curPos;
 		
 		moveStopped = obstacleMovedStopped;
 	}
 
-	void UpdateIsBlocking()
+	public void UpdateIsBlocking()
 	{
 		List<Vector3> colliderDirections = new List<Vector3> ();
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, AI_Pathfinding.layoutMask);

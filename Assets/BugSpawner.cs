@@ -11,9 +11,11 @@ public class BugSpawner : MonoBehaviour {
 	public List<BugController> bc;
 	int bugnumber = 1;
 
+	PlayerController player;
+
 	// Use this for initialization
 	void Start () {
-
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController>();
 	}
 	
 	// Update is called once per frame
@@ -25,6 +27,7 @@ public class BugSpawner : MonoBehaviour {
 			b = (GameObject)Instantiate (bug, GameObject.FindGameObjectWithTag("spawnpoint").transform.position, Quaternion.identity);
 			RoomNotifier.bc.Add(b.GetComponent<BugController>());
 			BugController.BugList.Add(b);
+			player.NPCs.Add(b);
 			//Debug.Log("Bug Number "  + bugs);
 			if(bugs < maxspawn/2){
 				b.GetComponent<BugController>().groupNumber = 1;
