@@ -105,7 +105,7 @@ public class RoomNotifier : MonoBehaviour
 		}
 
 		if (other.CompareTag ("Gerald")) {
-			Debug.Log("Gerald Entered Room");
+		//	Debug.Log("Gerald Entered Room");
 			string roomNumber = this.collider.tag;
 			int currentRoomNumber = gb.GetRoomNumber();
 			switch(roomNumber){
