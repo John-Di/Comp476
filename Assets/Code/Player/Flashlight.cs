@@ -39,7 +39,7 @@ public class Flashlight : MonoBehaviour
 		}
 		else if(flashlight.intensity == 0 && lightBattery < batteryLife)
 		{
-			lightBattery += Time.deltaTime;
+			lightBattery += Time.deltaTime/2;
 		}
 
 		if(lightBattery <= 0f && flashlight.intensity != 0)

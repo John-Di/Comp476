@@ -104,6 +104,8 @@ public class AIMovement : MonoBehaviour
 
 	public void UpdatePath(List<Vector3> p)
 	{
+		if(reposition == true)
+			return;
 		path = new List<Vector3>();
 		target = p[0];
 		AddToPath(p);
@@ -112,6 +114,8 @@ public class AIMovement : MonoBehaviour
 
 	public void UpdatePath(Vector3 p)
 	{
+		if(reposition == true)
+			return;
 		path = new List<Vector3>();
 		target = p;
 		AddToPath(p);
@@ -143,6 +147,7 @@ public class AIMovement : MonoBehaviour
 
 	public void Reposition(Vector3 p)
 	{
+		reposition = false;
 		UpdatePath (p);
 		reposition = true;
 	}

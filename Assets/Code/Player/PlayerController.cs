@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if(!anim.GetBool("isDead"))
 		{
+			Screen.lockCursor = true;
 			UpdateRotation();
 			UpdateMovement();
 			UpdateFear();
@@ -134,7 +135,7 @@ public class PlayerController : MonoBehaviour
 			float dist =(NPC.transform.position - transform.position).magnitude;
 			if(dist <= 25f && dist >= 1f)
 			{
-				fearLevel += (0.2f / dist);
+				fearLevel += (0.3f / dist);
 				monsterFearTimer = 0f;
 			}
 		}

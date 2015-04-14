@@ -16,6 +16,7 @@ public class Ghost : Trap
 	// Use this for initialization
 	void Awake () {
 		bugScreech = GameObject.FindGameObjectWithTag ("spawnpoint").GetComponent<AudioSource>();
+		fearValue = 0.15f;
 	}
 	
 	// Update is called once per frame
@@ -44,6 +45,7 @@ public class Ghost : Trap
 					if (!scream.isPlaying) {
 						scream.Play ();
 						DisableTrap();
+					coll.GetComponent<PlayerController>().fearLevel += fearValue;
 					}
 				
 

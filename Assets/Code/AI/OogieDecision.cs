@@ -10,6 +10,8 @@ public class OogieDecision : MonoBehaviour {
 	public AudioSource oogieAudio;
 	GameObject[] waypoints;
 	int randomPosition;
+	PlayerController player;
+	MovingWall[] mWalls;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +21,8 @@ public class OogieDecision : MonoBehaviour {
 		waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
 		randomPosition = Random.Range(0, waypoints.Length);
 		oogieAudio = GetComponent<AudioSource> ();
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
+		mWalls = GameObject.FindObjectsOfType<MovingWall> ();
 
 		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
 		oogie.GetComponent<PathfindingAgent> ().target = GameObject.FindGameObjectWithTag ("Player").transform;
@@ -32,6 +36,8 @@ public class OogieDecision : MonoBehaviour {
 			//chase Player
 			timer -= Time.deltaTime;
 		} else { //timer is <=0 
+			if(player.NPCs.Contains(oogie))
+				player.NPCs.Remove(oogie);
 			Destroy(oogie);
 			oogie = null;
 			respawnTimer -= Time.deltaTime;
@@ -53,8 +59,17 @@ public class OogieDecision : MonoBehaviour {
 		randomPosition = Random.Range(0, waypoints.Length);
 		if (!oogieAudio.isPlaying) {
 			oogieAudio.Play();
+			player.fearLevel += 0.05f;
 		}
 		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
-		oogie.GetComponent<PathfindingAgent> ().target = GameObject.FindGameObjectWithTag ("Player").transform;
+		PathfindingAgent oogieAgent = oogie.GetComponent<PathfindingAgent> ();
+		oogieAgent.target = GameObject.FindGameObjectWithTag ("Player").transform;
+		if(!player.NPCs.Contains(oogie))
+			player.NPCs.Add(oogie);
+		foreach(MovingWall wall in mWalls)
+		{
+			if(!wall.agents.Contains(oogieAgent))
+				wall.agents.Add(oogieAgent);
+		}
 	}
 }

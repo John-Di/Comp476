@@ -4,10 +4,16 @@ using System.Collections;
 public class SnapTrap : Trap {
 	Vector3 direction;
 
+	void Start()
+	{
+		fearValue = 0.075f;
+	}
+
 	void OnTriggerEnter(Collider other){
 		if (this.isTrapEnabled == true) {
 			if (other.gameObject == player) {
 				other.gameObject.rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+				pc.fearLevel += fearValue;
 				StartCoroutine("RegainControl");
 			}
 		}

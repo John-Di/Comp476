@@ -12,10 +12,12 @@ public class BugSpawner : MonoBehaviour {
 	int bugnumber = 1;
 
 	PlayerController player;
+	MovingWall[] mWalls;
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController>();
+		mWalls = GameObject.FindObjectsOfType<MovingWall> ();
 	}
 	
 	// Update is called once per frame
@@ -28,6 +30,13 @@ public class BugSpawner : MonoBehaviour {
 			RoomNotifier.bc.Add(b.GetComponent<BugController>());
 			BugController.BugList.Add(b);
 			player.NPCs.Add(b);
+			PathfindingAgent bugAgent = b.GetComponent<PathfindingAgent>();
+			foreach(MovingWall wall in mWalls)
+			{
+				if(!wall.agents.Contains(bugAgent))
+					wall.agents.Add(bugAgent);
+			}
+
 			//Debug.Log("Bug Number "  + bugs);
 			if(bugs < maxspawn/2){
 				b.GetComponent<BugController>().groupNumber = 1;

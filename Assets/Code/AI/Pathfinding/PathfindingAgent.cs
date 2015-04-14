@@ -17,15 +17,13 @@ public class PathfindingAgent : MonoBehaviour {
 	IComparer<TriangleNode> comparer = new TriangleNode();
 	//Keep track of node with the lowest EstimatedDistanceToEnd for unreachable endNodes
 	TriangleNode smallestHeuristicNode;
-	bool unreachablePath = false;
-	
+
 	AIMovement movement;
 	CollisionAvoidance avoid;
 	
 	Vector3 curPos, lastPos;
 	bool targetMoved = false;
-	float lastMoveTime = 0f, tryTime = 0f;
-	
+
 	MovingObject lastObstacle;
 	
 	bool hasInit = false;
@@ -38,7 +36,6 @@ public class PathfindingAgent : MonoBehaviour {
 		avoid = GetComponent<CollisionAvoidance> ();
 		movement.target = target.transform.position;
 		pathVertices.Add (transform.position);
-		tryTime = Random.Range(1f, 2f);
 	}
 	
 	// Update is called once per frame
@@ -131,8 +128,6 @@ public class PathfindingAgent : MonoBehaviour {
 		if(curPos != lastPos)
 		{
 			targetMoved = true;
-			if(lastMoveTime < tryTime)
-				lastMoveTime += Time.deltaTime;
 		}
 		else if(targetMoved)
 		{
@@ -141,10 +136,8 @@ public class PathfindingAgent : MonoBehaviour {
 		}
 		lastPos = curPos;
 		
-		if((unreachablePath && lastMoveTime < tryTime) || !Physics.Linecast(pathVertices[pathVertices.Count - 1], curPos, AI_Pathfinding.layoutMask))
+		if(!Physics.Linecast(pathVertices[pathVertices.Count - 1], curPos, AI_Pathfinding.layoutMask))
 			targetMovedStopped = false;
-		else if(targetMovedStopped)
-			lastMoveTime = 0f;
 		
 		return targetMovedStopped;
 	}
@@ -175,7 +168,6 @@ public class PathfindingAgent : MonoBehaviour {
 		startNode.costSoFar = 0;
 		startNode.heuristicValue = (endNode.nodePosition - startNode.nodePosition).magnitude;
 		smallestHeuristicNode = startNode;
-		unreachablePath = false;
 		//Calculate path
 		calculateAStarEuclideanDistance ();
 		
@@ -286,7 +278,7 @@ public class PathfindingAgent : MonoBehaviour {
 			if(!visitNode_AStarEuclideanDistance (openList[0]))
 			{
 				openList[0] = smallestHeuristicNode;
-				unreachablePath = true;
+				print ("unreachable path");
 				break;
 			}
 		}
@@ -342,6 +334,17 @@ public class PathfindingAgent : MonoBehaviour {
 		{
 			if(Physics.Linecast (outputPath[outputPath.Count - 1], inputPath[i], AI_Pathfinding.layoutMask))
 			{
+				RaycastHit hit;
+				//Since smoothing happens every frame, check to avoid going to a blocked off path.
+				if(Physics.Raycast (outputPath[outputPath.Count - 1], (inputPath[i] - outputPath[outputPath.Count - 1]), out hit, (inputPath[i] - outputPath[outputPath.Count - 1]).magnitude, AI_Pathfinding.movingMask))
+				{
+					//Only avoid node if the obstacle is blocking a path
+					if(hit.transform.GetComponent<MovingObject>().isBlocking)
+					{
+						lastObstacle = hit.transform.GetComponent<MovingObject>();
+						continue;
+					}
+				}
 				outputPath.Add(inputPath[i - 1]);
 			}
 		}
@@ -351,12 +354,14 @@ public class PathfindingAgent : MonoBehaviour {
 		return outputPath;
 	}
 
-	void OnCollisionEnter(Collision collision) {
-		foreach (ContactPoint contact in collision.contacts) {
-			if(contact.otherCollider.tag != "Wall")
-				continue;
-			movement.Reposition(rigidbody.position + (contact.normal.normalized + transform.forward.normalized));
-			Debug.DrawRay(contact.point,contact.normal, Color.white,10f);
-		}
-	}
+//	void OnCollisionStay(Collision collision) {
+//		foreach (ContactPoint contact in collision.contacts) {
+//			if(contact.otherCollider.tag != "Wall")
+//				continue;
+//			Vector3 newPos = rigidbody.position + ((contact.normal.normalized + (movement.target - transform.position).normalized) * 0.5f);
+//			newPos.y = transform.position.y;
+//			movement.Reposition(newPos);
+//			//Debug.DrawRay(contact.point, contact.normal, Color.white,10f);
+//		}
+//	}
 }

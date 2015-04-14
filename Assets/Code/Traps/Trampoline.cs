@@ -6,7 +6,7 @@ public class Trampoline : Trap {
 
 	void Start()
 	{
-		fearValue = 0.05f;
+		fearValue = 0.075f;
 	}
 
 	void Update(){
@@ -17,7 +17,7 @@ public class Trampoline : Trap {
 		if (this.isTrapEnabled) {
 			if (other.gameObject.CompareTag("Player")) {
 				Debug.Log("BLARGE");
-				other.gameObject.GetComponent<PlayerController>().fearLevel += fearValue;
+				pc.fearLevel += fearValue;
 				other.gameObject.rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY 
 					| RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
 				other.gameObject.rigidbody.AddForce(Vector3.up * 500f);

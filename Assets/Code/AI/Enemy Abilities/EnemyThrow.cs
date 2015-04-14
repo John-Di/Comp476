@@ -17,12 +17,15 @@ public class EnemyThrow : MonoBehaviour
 
 	private AIMovement movement;
 
+	float maxVel;
+
 	// Use this for initialization
 	void Awake ()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player");
 		movement = GetComponent<AIMovement>();
 		col = GetComponent<SphereCollider> ();
+		maxVel = movement.MaxVelocity;
 
 		shotInterval = 0;
 	}
@@ -53,7 +56,7 @@ public class EnemyThrow : MonoBehaviour
 		}
 		else
 		{
-			movement.MaxVelocity = 2.0f;
+			movement.MaxVelocity = maxVel;
 		}
 	}
 
