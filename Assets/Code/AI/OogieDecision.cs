@@ -5,6 +5,7 @@ public class OogieDecision : MonoBehaviour {
 	static float  timer; 
 	static float respawnTimer;
 	public static GameObject oogie;
+	PathfindingAgent oogieAgent;
 	bool isOogieActive = false;
 	public GameObject oogiePrefab;
 	public AudioSource oogieAudio;
@@ -26,6 +27,7 @@ public class OogieDecision : MonoBehaviour {
 
 		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
 		oogie.GetComponent<PathfindingAgent> ().target = GameObject.FindGameObjectWithTag ("Player").transform;
+		oogieAgent = oogie.GetComponent<PathfindingAgent> ();
 	}
 	
 	// Update is called once per frame
@@ -38,6 +40,11 @@ public class OogieDecision : MonoBehaviour {
 		} else { //timer is <=0 
 			if(player.NPCs.Contains(oogie))
 				player.NPCs.Remove(oogie);
+			foreach(MovingWall wall in mWalls)
+			{
+				if(wall.agents.Contains(oogieAgent))
+					wall.agents.Remove(oogieAgent);
+			}
 			Destroy(oogie);
 			oogie = null;
 			respawnTimer -= Time.deltaTime;
@@ -62,7 +69,7 @@ public class OogieDecision : MonoBehaviour {
 			player.fearLevel += 0.05f;
 		}
 		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
-		PathfindingAgent oogieAgent = oogie.GetComponent<PathfindingAgent> ();
+		oogieAgent = oogie.GetComponent<PathfindingAgent> ();
 		oogieAgent.target = GameObject.FindGameObjectWithTag ("Player").transform;
 		if(!player.NPCs.Contains(oogie))
 			player.NPCs.Add(oogie);

@@ -24,29 +24,13 @@ public class MovingWall : MonoBehaviour {
 		PathfindingAgent[] agentsArray = GameObject.FindObjectsOfType<PathfindingAgent> ();
 		foreach(PathfindingAgent agent in agentsArray)
 			agents.Add(agent);
+		moving.isBlocking = true;
 		renderer.enabled = false;
 		collider.enabled = false;
 		wallType = Random.Range (0, 2);
 		fearType = Random.Range (0, 2);
 		fearRequired = Random.Range (0.1f, 0.9f);
 	}
-
-//	void SetupWall()
-//	{
-//		switch(wallType)
-//		{
-//		case 0://Appearing Wall --> set it to disappeared
-//			renderer.enabled = false;
-//			collider.enabled = false;
-//			moving.SetMoved(true);
-//			break;
-//		case 1://Disappearing Wall --> set it to appeared
-//			renderer.enabled = true;
-//			collider.enabled = true;
-//			moving.SetMoved(true);
-//			break;
-//		}
-//	}
 
 	// Update is called once per frame
 	void Update () {
@@ -61,7 +45,10 @@ public class MovingWall : MonoBehaviour {
 			renderer.enabled = false;
 			collider.enabled = false;
 			foreach(PathfindingAgent agent in agents)
+			{
+				print ("Moving wall update agent path " + agent.gameObject.name);
 				agent.UpdatePath();
+			}
 		}
 	}
 
@@ -75,7 +62,10 @@ public class MovingWall : MonoBehaviour {
 			renderer.enabled = true;
 			collider.enabled = true;
 			foreach(PathfindingAgent agent in agents)
+			{
+				print ("Moving wall update agent path " + agent.gameObject.name);
 				agent.UpdatePath();
+			}
 			activationTime = 0f;
 		}
 		else if(!checkFear && renderer.enabled)
@@ -102,7 +92,10 @@ public class MovingWall : MonoBehaviour {
 			renderer.enabled = true;
 			collider.enabled = true;
 			foreach(PathfindingAgent agent in agents)
+			{
+				print ("Moving wall update agent path " + agent.gameObject.name);
 				agent.UpdatePath();
+			}
 			activationTime = 0f;
 		}
 	}
@@ -123,5 +116,6 @@ public class MovingWall : MonoBehaviour {
 			UpdateDisappearing();
 			break;
 		}
+		moving.isBlocking = true;
 	}
 }
