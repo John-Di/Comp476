@@ -33,8 +33,7 @@ public class BugSpawner : MonoBehaviour {
 			PathfindingAgent bugAgent = b.GetComponent<PathfindingAgent>();
 			foreach(MovingWall wall in mWalls)
 			{
-				if(!wall.agents.Contains(bugAgent))
-					wall.agents.Add(bugAgent);
+				wall.agents.Add(bugAgent);
 			}
 
 			//Debug.Log("Bug Number "  + bugs);

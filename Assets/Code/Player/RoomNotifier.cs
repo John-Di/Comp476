@@ -7,7 +7,7 @@ public class RoomNotifier : MonoBehaviour
 {
 	PlayerController pc;
 	GeraldBehaviour gb;
-	public static List<BugController> bc;
+	public static List<BugController> bc = new List<BugController> ();
 
 	// Use this for initialization
 	void Start (){

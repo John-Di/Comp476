@@ -178,6 +178,8 @@ public class PathfindingAgent : MonoBehaviour {
 		}
 		
 		pathVertices = smoothPath(pathVertices);
+		if(!movement)
+			movement = GetComponent<AIMovement>();
 		movement.UpdatePath (pathVertices);
 	}
 	
