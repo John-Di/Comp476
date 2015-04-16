@@ -33,7 +33,7 @@ public class RoomNotifier : MonoBehaviour
 				case "Hallway1":
 					if(currentRoomNumber != 1){
 						pc.SetRoomNumber(1);
-						bc.ForEach(b => {b.PlayerChangedRooms(1);});
+						bc.ForEach(b => {b.PlayerChangedRooms(1);});//Room has one entrance
 					}
 					break;
 				case "Room39":
@@ -63,7 +63,7 @@ public class RoomNotifier : MonoBehaviour
 				case "Room32":
 					if(currentRoomNumber != 32){
 						pc.SetRoomNumber(32);
-						bc.ForEach(b => {b.PlayerChangedRooms(1);});
+						bc.ForEach(b => {b.PlayerChangedRooms(1);});//Room has one entrance
 					}
 					break;
 				case "Hallway2":
@@ -93,7 +93,7 @@ public class RoomNotifier : MonoBehaviour
 				case "Room49":
 					if(currentRoomNumber != 49){
 						pc.SetRoomNumber(49);
-						bc.ForEach(b => {b.PlayerChangedRooms(49);});
+						bc.ForEach(b => {b.PlayerChangedRooms(1);}); //Room has one entrance
 					}
 					break;
 				case "Room28":
