@@ -20,21 +20,20 @@ public class PathfindingAgent : MonoBehaviour {
 
 	AIMovement movement;
 	CollisionAvoidance avoid;
-	
+	MovingObject lastObstacle;
+
 	Vector3 curPos, lastPos;
 	bool targetMoved = false;
-
-	MovingObject lastObstacle;
-	
 	bool hasInit = false;
-
 	Vector3 posX1, posX2;
+	float maxVel;
 
 	// Use this for initialization
 	void Start () {
 		movement = GetComponent<AIMovement> ();
 		avoid = GetComponent<CollisionAvoidance> ();
 		movement.target = target.transform.position;
+		maxVel = movement.MaxVelocity;
 		pathVertices.Add (transform.position);
 	}
 	
@@ -63,7 +62,8 @@ public class PathfindingAgent : MonoBehaviour {
 			if(targetReachable)
 			{
 				curTarget = target.transform.position;
-				movement.UpdatePath(curTarget);
+				//movement.UpdatePath(curTarget);
+				pathVertices.Add(curTarget);
 				seenTarget = true;
 			}
 		}
@@ -81,16 +81,25 @@ public class PathfindingAgent : MonoBehaviour {
 			}
 		}
 		
-		Draw();
+		//Draw();
 		
 		//Current target is current node path being seeked
 		if(!seenTarget)
+		{
 			curTarget = movement.target;
+			if(gameObject.tag != "Gerald")
+				movement.MaxVelocity = maxVel * 2f;
+		}
+		else if(Vector3.Distance (target.transform.position, transform.position) >= 40f && gameObject.tag != "Gerald")
+			movement.MaxVelocity = maxVel * 2f;
+		else if(gameObject.tag != "Gerald")
+			movement.MaxVelocity = maxVel;
+
 		if(avoid.enabled)
 			avoid.target = curTarget;
 
-		Debug.DrawLine (posX1, curTarget, Color.red);
-		Debug.DrawLine (posX2, curTarget, Color.red);
+		//Debug.DrawLine (posX1, curTarget, Color.red);
+		//Debug.DrawLine (posX2, curTarget, Color.red);
 
 		RaycastHit hit;
 		//Check for collisions with dynamic obstacles (e.g. doors)
@@ -121,10 +130,10 @@ public class PathfindingAgent : MonoBehaviour {
 		}
 		
 		//Smooth path by cutting unecessary nodes from the path as the agent travels the nodes
-		//pathVertices = smoothPath(pathVertices);
+		pathVertices = smoothPath(pathVertices);
 		//Update the path to seek
-		//if(movement.path != pathVertices)
-		//	movement.UpdatePath (pathVertices);
+		if(movement.path != pathVertices)
+			movement.UpdatePath (pathVertices);
 	}
 	
 	bool ObstacleMoved()
@@ -151,8 +160,8 @@ public class PathfindingAgent : MonoBehaviour {
 			targetMoved = false;
 		}
 		lastPos = curPos;
-		
-		if(!Physics.Linecast(pathVertices[pathVertices.Count - 1], curPos, AI_Pathfinding.layoutMask))
+
+		if(pathVertices.Count != 0 && !Physics.Linecast(pathVertices[pathVertices.Count - 1], curPos, AI_Pathfinding.layoutMask))
 			targetMovedStopped = false;
 		
 		return targetMovedStopped;
@@ -296,7 +305,8 @@ public class PathfindingAgent : MonoBehaviour {
 			if(!visitNode_AStarEuclideanDistance (openList[0]))
 			{
 				openList[0] = smallestHeuristicNode;
-				print ("unreachable path");
+				print ("unreachable path: " + gameObject.name + " : " + transform.position);
+				transform.position = new Vector3(67.1f, transform.position.y, 86.6f);
 				break;
 			}
 		}
@@ -347,27 +357,22 @@ public class PathfindingAgent : MonoBehaviour {
 		//Happens on some sharp corners
 		if(outputPath.Count == 0)
 			return inputPath;
-		
-		for(int i = (index + 2); i <= inputPath.Count - 1; i++)
-		{
-			if(Physics.Linecast (outputPath[outputPath.Count - 1], inputPath[i], AI_Pathfinding.layoutMask))
-			{
-				RaycastHit hit;
-				//Since smoothing happens every frame, check to avoid going to a blocked off path.
-				if(Physics.Raycast (outputPath[outputPath.Count - 1], (inputPath[i] - outputPath[outputPath.Count - 1]), out hit, (inputPath[i] - outputPath[outputPath.Count - 1]).magnitude, AI_Pathfinding.movingMask))
-				{
-					//Only avoid node if the obstacle is blocking a path
-					if(hit.transform.GetComponent<MovingObject>().isBlocking)
-					{
-						lastObstacle = hit.transform.GetComponent<MovingObject>();
-						continue;
-					}
-				}
-				outputPath.Add(inputPath[i - 1]);
-			}
-		}
 
-		outputPath.Add(inputPath[inputPath.Count - 1]);
+		for(int i = (index + 1); i < inputPath.Count; i++)
+		{
+			outputPath.Add(inputPath[i]);
+		}
+		
+
+//		for(int i = (index + 2); i <= inputPath.Count - 1; i++)
+//		{
+//			if(Physics.Linecast (outputPath[outputPath.Count - 1], inputPath[i], AI_Pathfinding.layoutMask))
+//			{
+//				outputPath.Add(inputPath[i - 1]);
+//			}
+//		}
+//
+//		outputPath.Add(inputPath[inputPath.Count - 1]);
 		
 		return outputPath;
 	}

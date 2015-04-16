@@ -36,9 +36,9 @@ public class MovingWall : MonoBehaviour {
 		float dist = Vector3.Distance(transform.position, player.transform.position);
 		bool playerSees = !Physics.Linecast (player.transform.position, transform.position, (1 << 8));
 
-		if(dist <= 50f && playerSees)
+		if(dist <= 60f && playerSees)
 			UpdateWall();
-		else if(renderer.enabled && (dist > 50f || !playerSees))
+		else if(renderer.enabled && (dist > 60f || !playerSees))
 		{
 			renderer.enabled = false;
 			collider.enabled = false;
@@ -69,14 +69,14 @@ public class MovingWall : MonoBehaviour {
 		bool checkFear = (fearType == 0 && player.fearLevel >= fearRequired) || (fearType == 1 && player.fearLevel < fearRequired);
 		if(checkFear && renderer.enabled)
 		{
-			if(!sound.isPlaying)
-				sound.Play();
 			renderer.enabled = false;
 			collider.enabled = false;
 			activationTime = 0f;
 		}
 		else if(!checkFear && !renderer.enabled)
 		{
+			if(!sound.isPlaying)
+				sound.Play();
 			renderer.enabled = true;
 			collider.enabled = true;
 			activationTime = 0f;
@@ -85,11 +85,11 @@ public class MovingWall : MonoBehaviour {
 
 	void UpdateWall()
 	{
-		if(activationTime < 3f)
-		{
-			activationTime += Time.deltaTime;
-			return;
-		}
+//		if(activationTime < 1f)
+//		{
+//			activationTime += Time.deltaTime;
+//			return;
+//		}
 		switch(wallType)
 		{
 		case 0://Appearing Wall

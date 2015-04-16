@@ -24,8 +24,8 @@ public class OogieDecision : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 
 		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
+		oogie.transform.position = new Vector3(oogie.transform.position.x, 0.5f, oogie.transform.position.z);
 		oogie.GetComponent<PathfindingAgent> ().target = GameObject.FindGameObjectWithTag ("Player").transform;
-		oogieAgent = oogie.GetComponent<PathfindingAgent> ();
 	}
 	
 	// Update is called once per frame
@@ -38,7 +38,8 @@ public class OogieDecision : MonoBehaviour {
 		} else { //timer is <=0 
 			if(player.NPCs.Contains(oogie))
 				player.NPCs.Remove(oogie);
-			Destroy(oogie);
+			if(oogie)
+				oogie.GetComponent<MonsterBehavior>().Death();
 			oogie = null;
 			respawnTimer -= Time.deltaTime;
 			if(respawnTimer > 0){
@@ -62,6 +63,7 @@ public class OogieDecision : MonoBehaviour {
 			player.fearLevel += 0.05f;
 		}
 		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
+		oogie.transform.position = new Vector3(oogie.transform.position.x, 0.5f, oogie.transform.position.z);
 		oogieAgent = oogie.GetComponent<PathfindingAgent> ();
 		oogieAgent.target = GameObject.FindGameObjectWithTag ("Player").transform;
 		if(!player.NPCs.Contains(oogie))

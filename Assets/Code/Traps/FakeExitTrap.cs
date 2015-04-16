@@ -30,13 +30,14 @@ public class FakeExitTrap : Trap {
 				//oogieController.GetComponent<OogieDecision>().enabled = true;
 
 				Destroy (GameObject.FindGameObjectWithTag("OogieController"));
-				oogieController = (GameObject) Resources.Load("OogieController");
+				oogieController = (GameObject) Resources.Load("Jordan's Scene/OogieController");
 				Instantiate(oogieController, Vector3.zero, Quaternion.identity);
 
 				StartCoroutine("MoveNPCToLocation");
 				//enemy.transform.position = Vector3.zero;
 			}else{
 				enemy.transform.position = this.transform.position;
+				enemy.transform.position = new Vector3(enemy.transform.position.x, 0.5f, enemy.transform.position.z);
 			}
 
 			DisableTrap();
@@ -48,5 +49,6 @@ public class FakeExitTrap : Trap {
 		yield return new WaitForSeconds(0.5f);
 		enemy = GameObject.FindGameObjectWithTag("Oogie");
 		enemy.transform.position = this.gameObject.transform.position;
+		enemy.transform.position = new Vector3(enemy.transform.position.x, 0.5f, enemy.transform.position.z);
 	}
 }
