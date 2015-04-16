@@ -61,7 +61,7 @@ public class AIMovement : MonoBehaviour
 	private void UpdateVelocities(float deltaTime)
 	{	
 		Vector2 posDiff = new Vector2(target.x - transform.position.x, target.z - transform.position.z);
-		halt = (path.Count == 0 && posDiff.magnitude <= 0.1f);
+		halt = (path.Count == 0 && posDiff.magnitude <= 0.2f);
 		
 		if(!halt)
 		{
@@ -85,7 +85,7 @@ public class AIMovement : MonoBehaviour
 	{
 		Vector2 posDiff = new Vector2(target.x - transform.position.x, target.z - transform.position.z);
 		
-		if(target == null || posDiff.magnitude > 0.1f)
+		if(target == null || posDiff.magnitude > 0.2f)
 		{
 			transform.position += velocity * deltaTime;
 		}

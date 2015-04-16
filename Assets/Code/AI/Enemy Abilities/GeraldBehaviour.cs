@@ -35,7 +35,8 @@ public class GeraldBehaviour : MonoBehaviour
 	// Selects new target when it reaches the current target
 	void CheckLocation()
 	{
-		if(Vector3.Distance (pa.target.position, transform.position) <= 0.1f)
+		float dist = new Vector3 (pa.target.position.x - transform.position.x, 0, pa.target.position.z - transform.position.z).magnitude;
+		if(dist <= 0.2f)
 		{
 			Debug.Log ("Reached target");
 			NewWaypoint ();

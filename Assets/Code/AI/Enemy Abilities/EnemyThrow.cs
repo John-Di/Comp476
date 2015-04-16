@@ -12,10 +12,12 @@ public class EnemyThrow : MonoBehaviour
 	public float fieldOfViewAngle = 110f;
 
 	public GameObject projectile;
+	public Transform projectilePos;
 	private float shotInterval;
 	private float resetShotInterval = 3f;
 
 	private AIMovement movement;
+	private Animation anim;
 
 	float maxVel;
 
@@ -25,6 +27,7 @@ public class EnemyThrow : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag ("Player");
 		movement = GetComponent<AIMovement>();
 		col = GetComponent<SphereCollider> ();
+		anim = GetComponent<Animation> ();
 		maxVel = movement.MaxVelocity;
 
 		shotInterval = 0;
@@ -35,6 +38,13 @@ public class EnemyThrow : MonoBehaviour
 	{
 		if (playerInRange)
 		{
+			foreach (AnimationState state in anim) {
+				if(state.name == "idle")
+				{
+					anim.clip = state.clip;
+					anim.Play();
+				}
+			}
 			movement.MaxVelocity = 0.0f;
 			direction = (player.transform.position - transform.position);
 			Quaternion rotation = Quaternion.LookRotation(direction);
@@ -57,6 +67,13 @@ public class EnemyThrow : MonoBehaviour
 		else
 		{
 			movement.MaxVelocity = maxVel;
+			foreach (AnimationState state in anim) {
+				if(state.name == "walk")
+				{
+					anim.clip = state.clip;
+					anim.Play();
+				}
+			}
 		}
 	}
 
@@ -81,6 +98,6 @@ public class EnemyThrow : MonoBehaviour
 	{
 
 		GameObject attack = (GameObject) Instantiate (projectile, transform.GetChild(0).transform.position, Quaternion.identity);
-		attack.rigidbody.AddForce((player.transform.position - transform.position).normalized *400f);
+		attack.rigidbody.AddForce((player.transform.position - projectilePos.transform.position).normalized *400f);
 	}
 }

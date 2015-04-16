@@ -12,14 +12,16 @@ public class BugController : MonoBehaviour {
 	public List<GameObject> currentWaypointList;
 
 	public int groupNumber;
-	bool firstTime = false; //Delete this
 
 	private const int  maxSwarmCount = 4;
 	private int numberOfBugs = 0;
 
 	Transform currentNodePosition;
+	float growlTimer = 0f;
 
 	public AudioSource bugKill;
+	public AudioSource bugWalk;
+	public AudioSource bugGrowl;
 	public static bool alreadyPlayed = false;
 
 	public State state{
@@ -39,10 +41,25 @@ public class BugController : MonoBehaviour {
 
 		pc = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 		waypointArray = GameObject.FindGameObjectsWithTag ("Waypoint");
+		GetComponent<AIMovement>().MaxVelocity = Random.Range (3.5f, 4.5f);
 
 		//Set Initial state to Wait
 		bugState = State.Chase;
 		EnterState (bugState);
+	}
+
+	void Update()
+	{
+		if(!bugWalk.isPlaying)
+			bugWalk.Play();
+
+		if(growlTimer >= 10f && !bugGrowl.isPlaying)
+		{
+			bugGrowl.Play();
+			growlTimer = 0f;
+		}
+		else
+			growlTimer += Time.deltaTime;
 	}
 
 	void ExitState(State exitedState){

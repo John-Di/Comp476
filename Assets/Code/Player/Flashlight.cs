@@ -18,6 +18,7 @@ public class Flashlight : MonoBehaviour
 		MAX_INTENSITY = flashlight.intensity;
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController>();
 		lightBattery = batteryLife;
+		flashlight.intensity = 0;
 	}
 	
 	// Update is called once per frame
@@ -39,7 +40,7 @@ public class Flashlight : MonoBehaviour
 		}
 		else if(flashlight.intensity == 0 && lightBattery < batteryLife)
 		{
-			lightBattery += Time.deltaTime/2;
+			lightBattery += Time.deltaTime;
 		}
 
 		if(lightBattery <= 0f && flashlight.intensity != 0)
@@ -57,7 +58,7 @@ public class Flashlight : MonoBehaviour
 			}
 			else
 			{
-				player.fearLevel -= 0.025f;
+				player.fearLevel -= 0.05f;
 			}
 			player.flashLightTimer = 0f;
 		}

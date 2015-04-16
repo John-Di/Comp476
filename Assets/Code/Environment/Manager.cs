@@ -74,11 +74,11 @@ public class Manager : MonoBehaviour {
 		else if(player.fearLevel < 0.6f)
 			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.blue, Time.deltaTime);
 		else if(player.fearLevel < 0.7f)
-			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.red, Time.deltaTime);
+			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.blue, Time.deltaTime);
 		else if(player.fearLevel < 0.8f)
 			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.red, Time.deltaTime);
 		else if(player.fearLevel < 0.9f)
-			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.black, Time.deltaTime);
+			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.red, Time.deltaTime);
 		else
 			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.black, Time.deltaTime);
 	}

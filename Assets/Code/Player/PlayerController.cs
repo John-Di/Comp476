@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 		else if(fearLevel >= 1f)
 			fearLevel = 1f;
 
-		if(monsterFearTimer >= 1f)
+		if(monsterFearTimer >= 0.75f)
 			UpdateMonsterFear();
 		else
 			monsterFearTimer += Time.deltaTime;
