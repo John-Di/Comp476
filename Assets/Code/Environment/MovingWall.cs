@@ -7,7 +7,6 @@ public class MovingWall : MonoBehaviour {
 	AudioSource sound;
 	MovingObject moving;
 	Collider[] colliders;
-	public List<PathfindingAgent> agents;
 
 	public int wallType = 0;//Appearing or disappearing?
 	public int fearType = 0;//Need more fear than a threshold or less fear than a threshold?
@@ -21,9 +20,6 @@ public class MovingWall : MonoBehaviour {
 		sound = GetComponent<AudioSource> ();
 		moving = GetComponent<MovingObject> ();
 		colliders = GetComponents<Collider> ();
-		PathfindingAgent[] agentsArray = GameObject.FindObjectsOfType<PathfindingAgent> ();
-		foreach(PathfindingAgent agent in agentsArray)
-			agents.Add(agent);
 		moving.isBlocking = true;
 		renderer.enabled = false;
 		collider.enabled = false;
@@ -34,21 +30,18 @@ public class MovingWall : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		float dist = -1f;
-		if(!player.anim.GetBool("isDead"))
-			dist = Vector3.Distance(transform.position, player.transform.position);
+		if(player.anim.GetBool("isDead"))
+			return;
 
-		if(dist != -1f && dist <= 40f)
+		float dist = Vector3.Distance(transform.position, player.transform.position);
+		bool playerSees = !Physics.Linecast (player.transform.position, transform.position, (1 << 8));
+
+		if(dist <= 50f && playerSees)
 			UpdateWall();
-		else if(dist != -1f && dist > 40f && renderer.enabled)
+		else if(renderer.enabled && (dist > 50f || !playerSees))
 		{
 			renderer.enabled = false;
 			collider.enabled = false;
-			foreach(PathfindingAgent agent in agents)
-			{
-				print ("Moving wall update agent path " + agent.gameObject.name);
-				agent.UpdatePath();
-			}
 		}
 	}
 
@@ -61,11 +54,6 @@ public class MovingWall : MonoBehaviour {
 				sound.Play();
 			renderer.enabled = true;
 			collider.enabled = true;
-			foreach(PathfindingAgent agent in agents)
-			{
-				print ("Moving wall update agent path " + agent.gameObject.name);
-				agent.UpdatePath();
-			}
 			activationTime = 0f;
 		}
 		else if(!checkFear && renderer.enabled)
@@ -91,11 +79,6 @@ public class MovingWall : MonoBehaviour {
 		{
 			renderer.enabled = true;
 			collider.enabled = true;
-			foreach(PathfindingAgent agent in agents)
-			{
-				print ("Moving wall update agent path " + agent.gameObject.name);
-				agent.UpdatePath();
-			}
 			activationTime = 0f;
 		}
 	}

@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 	public int roomNumber = 0;
 
 	public Animator anim;
+	public Animator flashLightAnim;
 
 	void Awake()
 	{
@@ -80,9 +81,15 @@ public class PlayerController : MonoBehaviour
 
 		float velMagn = rigidbody.velocity.magnitude;
 		if(velMagn > 0.1f && !footSteps.isPlaying && transform.position.y <= 2f)
+		{
 			footSteps.Play();
+			flashLightAnim.SetBool("isMoving",true);
+		}
 		else if((velMagn <= 0.1f || transform.position.y > 2f) && footSteps.isPlaying)
+		{
 			footSteps.Stop();
+			flashLightAnim.SetBool("isMoving",false);
+		}
 	}
 
 	void UpdateFear()
