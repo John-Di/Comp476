@@ -20,6 +20,7 @@ public class RoomNotifier : MonoBehaviour
 
 	void OnTriggerEnter(Collider other){
 		if (other.CompareTag ("Player")) {
+			Debug.Log("Player Entered Room");
 			string roomNumber = this.collider.tag;
 			int currentRoomNumber = pc.GetRoomNumber();
 			switch(roomNumber){
@@ -62,7 +63,7 @@ public class RoomNotifier : MonoBehaviour
 				case "Room32":
 					if(currentRoomNumber != 32){
 						pc.SetRoomNumber(32);
-						bc.ForEach(b => {b.PlayerChangedRooms(32);});
+						bc.ForEach(b => {b.PlayerChangedRooms(1);});
 					}
 					break;
 				case "Hallway2":

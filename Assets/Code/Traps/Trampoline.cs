@@ -16,7 +16,6 @@ public class Trampoline : Trap {
 	void OnTriggerEnter(Collider other){
 		if (this.isTrapEnabled) {
 			if (other.gameObject.CompareTag("Player")) {
-				Debug.Log("BLARGE");
 				pc.fearLevel += fearValue;
 				other.gameObject.rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationY 
 					| RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;

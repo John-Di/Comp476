@@ -32,7 +32,7 @@ public class FakeExitTrap : Trap {
 				Destroy (GameObject.FindGameObjectWithTag("OogieController"));
 				oogieController = (GameObject) Resources.Load("OogieController");
 				Instantiate(oogieController, Vector3.zero, Quaternion.identity);
-				enemy = GameObject.FindGameObjectWithTag("Oogie");
+
 				StartCoroutine("MoveNPCToLocation");
 				//enemy.transform.position = Vector3.zero;
 			}else{
@@ -45,7 +45,8 @@ public class FakeExitTrap : Trap {
 	}
 
 	IEnumerator MoveNPCToLocation(){
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForSeconds(0.5f);
+		enemy = GameObject.FindGameObjectWithTag("Oogie");
 		enemy.transform.position = this.gameObject.transform.position;
 	}
 }

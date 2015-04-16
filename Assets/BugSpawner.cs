@@ -4,20 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class BugSpawner : MonoBehaviour {
-	public int maxspawn = 4;
+	public int maxspawn;
+	GameObject[] spawnPoints;
 	public GameObject bug;
 	GameObject b;
-	public int bugs;
 	public List<BugController> bc;
-	int bugnumber = 1;
-
-	PlayerController player;
-	MovingWall[] mWalls;
 
 	// Use this for initialization
-	void Start () {
-		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController>();
-		mWalls = GameObject.FindObjectsOfType<MovingWall> ();
+	void Awake () {
+		spawnPoints = GameObject.FindGameObjectsWithTag ("spawnpoint");
+		maxspawn = spawnPoints.Count();
+		spawnBug ();
 	}
 	
 	// Update is called once per frame
@@ -25,6 +22,22 @@ public class BugSpawner : MonoBehaviour {
 	}
 
 	void spawnBug(){
+
+		for (int i=0; i < spawnPoints.Length; i++) {
+			b = (GameObject)Instantiate(bug, spawnPoints[i].transform.position,Quaternion.identity);
+			RoomNotifier.bc.Add(b.GetComponent<BugController>());
+
+			if(i < (spawnPoints.Length/2) ){
+				b.GetComponent<BugController>().groupNumber =1;
+				b.GetComponent<BugController>().PlayerChangedRooms(44);
+			}else{
+				b.GetComponent<BugController>().groupNumber =2;
+				b.GetComponent<BugController>().PlayerChangedRooms(44);
+			}
+		}
+
+		//RoomNotifier.bc.ForEach(s => {s.PlayerChangedRooms(44);}); //44 us player starting room
+		/*
 		if(bugs < maxspawn){
 			b = (GameObject)Instantiate (bug, GameObject.FindGameObjectWithTag("spawnpoint").transform.position, Quaternion.identity);
 			RoomNotifier.bc.Add(b.GetComponent<BugController>());
@@ -39,27 +52,15 @@ public class BugSpawner : MonoBehaviour {
 			//Debug.Log("Bug Number "  + bugs);
 			if(bugs < maxspawn/2){
 				b.GetComponent<BugController>().groupNumber = 1;
-				BugController.BugGroup1.Add(b);
 			}else{
 				b.GetComponent<BugController>().groupNumber = 2;
-				BugController.BugGroup2.Add(b);
 			}
 		}
-		bugs++;
+		bugs++;*/
 	}
 
-	void OnTriggerEnter(Collider other){
-		if(other.CompareTag("Player")){
-			spawnBug();
-
-			if(bugs == maxspawn){
-			//	Debug.Log("Notify done spawning");
-				bc = GameObject.FindGameObjectsWithTag ("BugController").Select(g => {
-					return g.GetComponent<BugController>();
-				}).ToList();
-
-				bc.ForEach(b => {b.NotifyBugSpawn();});
-			}
-		}
+	IEnumerator WaitForBugs(){
+		yield return new WaitForSeconds(1f);
+		spawnBug ();
 	}
 }

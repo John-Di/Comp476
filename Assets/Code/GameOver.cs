@@ -21,7 +21,7 @@ public class GameOver : MonoBehaviour
 			if(loadTime <= 0f)
 			{
 				Screen.lockCursor = false;
-				Application.LoadLevel ("Game Over");
+				Application.LoadLevel ("Menu");
 			}
 		}
 	}

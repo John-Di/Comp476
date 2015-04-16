@@ -4,24 +4,18 @@ using System.Collections.Generic;
 using System.Linq; 
 
 public class BugController : MonoBehaviour {
-	public enum State{Wait, FindingPlayer, Surround, Chase, Rest};
+	public enum State{Surround, Chase, Rest};
 	public State bugState;
 	public PlayerController pc;
 	public int playerRoomNumber; // change to private later
 	public GameObject[] waypointArray;
 	public List<GameObject> currentWaypointList;
-	public static List<GameObject> BugList;
-	public static List<GameObject> BugGroup1;
-	public static List<GameObject> BugGroup2;
+
 	public int groupNumber;
 	bool firstTime = false; //Delete this
 
 	private const int  maxSwarmCount = 4;
 	private int numberOfBugs = 0;
-
-	private GameObject[] wanderArray;
-	Transform wanderPoint;
-	int randomWandernode;
 
 	Transform currentNodePosition;
 
@@ -44,34 +38,15 @@ public class BugController : MonoBehaviour {
 		Physics.IgnoreLayerCollision (11, 11, true); //Add this until john get's the flocking working
 
 		pc = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
-
 		waypointArray = GameObject.FindGameObjectsWithTag ("Waypoint");
 
-		//List Of Bugs
-		BugList = GameObject.FindGameObjectsWithTag ("BugController").ToList();
-		BugGroup1 = new List<GameObject> ();
-		BugGroup2 = new List<GameObject> ();
-
-		//For Making Bugs Wander on Wait
-		wanderArray = GameObject.FindGameObjectsWithTag ("WanderPoints");
-		randomWandernode = Random.Range(0, wanderArray.Count());
-		wanderPoint = wanderArray [randomWandernode].transform;
 		//Set Initial state to Wait
-		bugState = State.Wait;
+		bugState = State.Chase;
 		EnterState (bugState);
 	}
 
 	void ExitState(State exitedState){
 		switch(exitedState){
-			case State.Wait:
-				this.GetComponent<AIMovement>().enabled = false;
-				this.GetComponent<PathfindingAgent>().enabled = false;
-				this.GetComponent<CollisionAvoidance> ().enabled = false;
-				break;
-			case State.FindingPlayer:
-				//end chasing player
-				//end find and reach waypoint
-				break;
 			case State.Surround:
 				this.GetComponent<AIMovement>().enabled = false;
 				this.GetComponent<PathfindingAgent>().enabled = false;
@@ -93,13 +68,13 @@ public class BugController : MonoBehaviour {
 
 	void EnterState(State enteredState){
 		switch (enteredState) {
-			case State.Wait:
-				//SpawnCheck();
-				WaitCheck();
-				break;
-			case State.FindingPlayer:
-			//find Player
-				break;
+//			case State.Wait:
+//				//SpawnCheck();
+//				WaitCheck();
+//				break;
+//			case State.FindingPlayer:
+//			//find Player
+//				break;
 			case State.Surround:
 				SurroundPlayer();
 				break;
@@ -112,11 +87,7 @@ public class BugController : MonoBehaviour {
 		}
 	}
 
-	void IdleWander(){
-		//change to spawn bug
-		//wait for sound
-	}
-
+	/*
 	void WaitCheck(){
 		if(numberOfBugs < maxSwarmCount){
 			this.GetComponent<AIMovement>().enabled = true;
@@ -128,7 +99,7 @@ public class BugController : MonoBehaviour {
 			bugState = State.FindingPlayer;
 			EnterState(bugState);
 		} 
-	}
+	}*/
 	
 
 	void StartChasing(){
@@ -160,19 +131,8 @@ public class BugController : MonoBehaviour {
 		currentWaypointList.Clear ();
 	}
 
-	//Called when a bug spawns
-	public void NotifyBugSpawn(){
-		numberOfBugs = BugList.Count;
-
-		if (numberOfBugs > maxSwarmCount) {
-			ExitState(bugState);
-			bugState = State.FindingPlayer;
-			EnterState(bugState);
-		}
-	}
-
 	public void PlayerChangedRooms(int roomNumber){
-		if (bugState == State.FindingPlayer || bugState == State.Surround || bugState == State.Chase) {
+		if (bugState == State.Surround || bugState == State.Chase) {
 			if (playerRoomNumber != roomNumber) {
 				playerRoomNumber = roomNumber;
 				ClearCurrentWaypointList ();
@@ -215,14 +175,6 @@ public class BugController : MonoBehaviour {
 				ExitState (bugState);
 				bugState = State.Chase;
 				EnterState (bugState);
-			}
-		}
-
-		if(randomWandernode != null && bugState == State.Wait){
-			if(other.gameObject.Equals(wanderPoint.gameObject)){
-				randomWandernode = Random.Range(0, wanderArray.Count() );
-				wanderPoint = wanderArray[randomWandernode].transform;
-				this.GetComponent<PathfindingAgent>().target = wanderPoint;
 			}
 		}
 	}
