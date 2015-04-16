@@ -30,11 +30,6 @@ public class BugSpawner : MonoBehaviour {
 			RoomNotifier.bc.Add(b.GetComponent<BugController>());
 			BugController.BugList.Add(b);
 			player.NPCs.Add(b);
-			PathfindingAgent bugAgent = b.GetComponent<PathfindingAgent>();
-			foreach(MovingWall wall in mWalls)
-			{
-				wall.agents.Add(bugAgent);
-			}
 
 			//Debug.Log("Bug Number "  + bugs);
 			if(bugs < maxspawn/2){

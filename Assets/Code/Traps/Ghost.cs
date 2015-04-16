@@ -34,10 +34,6 @@ public class Ghost : Trap {
 			BugController.BugList.Add(b);
 			pc.NPCs.Add(b);
 			PathfindingAgent bugAgent = b.GetComponent<PathfindingAgent>();
-			foreach(MovingWall wall in mWalls)
-			{
-				wall.agents.Add(bugAgent);
-			}
 			if(numberOfBugs < maxSpawn/2){
 				b.GetComponent<BugController>().groupNumber = 1;
 			}else{

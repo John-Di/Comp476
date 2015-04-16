@@ -40,11 +40,6 @@ public class OogieDecision : MonoBehaviour {
 		} else { //timer is <=0 
 			if(player.NPCs.Contains(oogie))
 				player.NPCs.Remove(oogie);
-			foreach(MovingWall wall in mWalls)
-			{
-				if(wall.agents.Contains(oogieAgent))
-					wall.agents.Remove(oogieAgent);
-			}
 			Destroy(oogie);
 			oogie = null;
 			respawnTimer -= Time.deltaTime;
@@ -73,10 +68,5 @@ public class OogieDecision : MonoBehaviour {
 		oogieAgent.target = GameObject.FindGameObjectWithTag ("Player").transform;
 		if(!player.NPCs.Contains(oogie))
 			player.NPCs.Add(oogie);
-		foreach(MovingWall wall in mWalls)
-		{
-			if(!wall.agents.Contains(oogieAgent))
-				wall.agents.Add(oogieAgent);
-		}
 	}
 }

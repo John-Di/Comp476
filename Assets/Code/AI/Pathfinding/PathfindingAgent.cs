@@ -47,11 +47,27 @@ public class PathfindingAgent : MonoBehaviour {
 		//If player can be seen make it the current target
 		if(!Physics.Linecast (posX1, target.transform.position, AI_Pathfinding.layoutMask) && !Physics.Linecast (posX2, target.transform.position, AI_Pathfinding.layoutMask))
 		{
-			curTarget = target.transform.position;
-			movement.UpdatePath(curTarget);
-			seenTarget = true;
+			bool targetReachable = false;
+			RaycastHit hitCheck;
+			//Check for collisions with dynamic obstacles (e.g. doors)
+			if(Physics.Raycast (transform.position, (target.transform.position - transform.position), out hitCheck, (target.transform.position - transform.position).magnitude, AI_Pathfinding.movingMask))
+			{
+				if(!hitCheck.transform.GetComponent<MovingObject>().isBlocking)
+				{
+					targetReachable = true;
+				}
+			}
+			else
+				targetReachable = true;
+
+			if(targetReachable)
+			{
+				curTarget = target.transform.position;
+				movement.UpdatePath(curTarget);
+				seenTarget = true;
+			}
 		}
-		else if(!hasInit || ObstacleMoved() || TargetMoved())
+		else if(!hasInit || TargetMoved())
 		{
 			hasInit = true;
 			try

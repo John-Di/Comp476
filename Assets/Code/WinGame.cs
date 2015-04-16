@@ -2,15 +2,18 @@
 using System.Collections;
 
 public class WinGame : MonoBehaviour {
+	public GameObject exitPositions;
 
 	// Use this for initialization
 	void Start () {
-		Screen.lockCursor = false;
+		Transform[] exits = exitPositions.GetComponentsInChildren<Transform> ();
+		int random = Random.Range (0, exits.Length);
+		transform.position = exits [random].position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	void OnTriggerEnter(Collider other){

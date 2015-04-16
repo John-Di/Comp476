@@ -64,21 +64,21 @@ public class Manager : MonoBehaviour {
 			RenderSettings.fogDensity = 0.5f;
 
 		if(player.fearLevel < 0.2f)
-			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.white, Time.deltaTime);
+			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.grey, Time.deltaTime);
 		else if(player.fearLevel < 0.3f)
-			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.white, Time.deltaTime);
+			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.grey, Time.deltaTime);
 		else if(player.fearLevel < 0.4f)
 			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.grey, Time.deltaTime);
 		else if(player.fearLevel < 0.5f)
-			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.grey, Time.deltaTime);
+			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.blue, Time.deltaTime);
 		else if(player.fearLevel < 0.6f)
 			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.blue, Time.deltaTime);
 		else if(player.fearLevel < 0.7f)
-			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.blue, Time.deltaTime);
+			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.red, Time.deltaTime);
 		else if(player.fearLevel < 0.8f)
 			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.red, Time.deltaTime);
 		else if(player.fearLevel < 0.9f)
-			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.red, Time.deltaTime);
+			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.black, Time.deltaTime);
 		else
 			RenderSettings.fogColor = Color.Lerp(RenderSettings.fogColor, Color.black, Time.deltaTime);
 	}
