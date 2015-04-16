@@ -73,9 +73,7 @@ public class TriangleNode : MonoBehaviour, IComparer<TriangleNode> {
 					count++;
 			}
 		}
-		if(count >= 3)
-			Debug.Log("Unexpected result");
-		else if(count >= 2)
+		if(count >= 2)
 			return true;
 		
 		return false;

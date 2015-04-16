@@ -12,7 +12,6 @@ public class OogieDecision : MonoBehaviour {
 	GameObject[] waypoints;
 	int randomPosition;
 	PlayerController player;
-	MovingWall[] mWalls;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +22,6 @@ public class OogieDecision : MonoBehaviour {
 		randomPosition = Random.Range(0, waypoints.Length);
 		oogieAudio = GetComponent<AudioSource> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
-		mWalls = GameObject.FindObjectsOfType<MovingWall> ();
 
 		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
 		oogie.GetComponent<PathfindingAgent> ().target = GameObject.FindGameObjectWithTag ("Player").transform;
