@@ -7,7 +7,7 @@ public class WinGame : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Transform[] exits = exitPositions.GetComponentsInChildren<Transform> ();
-		int random = Random.Range (0, exits.Length);
+		int random = Random.Range (1, exits.Length);
 		transform.position = exits [random].position;
 	}
 	
