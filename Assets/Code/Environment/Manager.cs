@@ -3,14 +3,18 @@ using System.Collections;
 
 public class Manager : MonoBehaviour {
 	public GameObject serialKiller;
-	public AudioSource deathSound;
+	public AudioSource deathSlenderSound;
+	public AudioSource warningSound;
 
 	PlayerController player;
 	bool soundPlaying = false;
+	float timeLimit = 0f;
+	float timerDeath = 0f;
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
+		timeLimit = Random.Range (10f, 30f);
 	}
 	
 	// Update is called once per frame
@@ -23,33 +27,33 @@ public class Manager : MonoBehaviour {
 	{
 		if(player.fearLevel == 1f && !soundPlaying && player.enabled == true)
 		{
-			deathSound.volume = 1f;
-			deathSound.Play();
+			warningSound.volume = 1f;
+			warningSound.Play();
 			soundPlaying = true;
+			timerDeath = 0f;
 		}
 		else if(player.fearLevel <= 0.95f && soundPlaying)
 		{
-			deathSound.volume = Mathf.Lerp(deathSound.volume, 0f, Time.deltaTime);
+			warningSound.volume = Mathf.Lerp(warningSound.volume, 0f, Time.deltaTime);
 			soundPlaying = false;
 		}
-		if(deathSound.volume < 1f && deathSound.volume > 0f)
-			deathSound.volume = Mathf.Lerp(deathSound.volume, 0f, Time.deltaTime);
-
-		
-		if(deathSound.time >= 10f && deathSound.volume == 1f && player.enabled == true)
+		if(warningSound.volume < 1f && warningSound.volume > 0f)
+			warningSound.volume = Mathf.Lerp(warningSound.volume, 0f, Time.deltaTime);
+		if(player.fearLevel > 0.95f) 
+			timerDeath += Time.deltaTime;
+		if(timerDeath >= timeLimit && player.enabled == true)
 		{
 			player.enabled = false;
 			player.rigidbody.velocity = Vector3.zero;
 			player.rigidbody.isKinematic = true;
+			deathSlenderSound.Play();
 			GameObject slender = (GameObject)Instantiate(serialKiller, player.transform.position + player.transform.forward * 1f, Quaternion.Euler(-90,0,0));
 			slender.transform.LookAt(player.transform.position);
 			slender.transform.rotation = Quaternion.Euler(-90, slender.transform.rotation.eulerAngles.y, slender.transform.rotation.eulerAngles.z);
-			slender.transform.position = new Vector3(slender.transform.position.x, -0.75f, slender.transform.position.z);
+			slender.transform.position = new Vector3(slender.transform.position.x, 0f, slender.transform.position.z);
 		}
-		else if(deathSound.time >= 10f && deathSound.volume < 1f)
-			deathSound.volume = 0f;
 		
-		if(player.enabled == false && !deathSound.isPlaying && !player.anim.GetBool("isDead"))
+		if(player.enabled == false && !deathSlenderSound.isPlaying && !player.anim.GetBool("isDead"))
 		{
 			player.Die();
 		}

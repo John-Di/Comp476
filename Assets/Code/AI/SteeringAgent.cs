@@ -42,7 +42,7 @@ public sealed class SteeringAgent : MonoBehaviour
 			{
 				//Velocity += b.Acceleration * deltaTime;
 				halt = b.HaltTranslation;
-				Debug.Log(b.Acceleration);
+				//Debug.Log(b.Acceleration);
 			}
 		}
 

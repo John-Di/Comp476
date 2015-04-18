@@ -17,7 +17,7 @@ public class SlowingMud : Trap {
 			if (other.gameObject == player) {
 				pc.moveSpeed /= 2.0f;
 				pc.fearLevel += fearValue;
-				Debug.Log("Player Entered TRAP");
+				//Debug.Log("Player Entered TRAP");
 			}
 		}
 	}
@@ -26,7 +26,7 @@ public class SlowingMud : Trap {
 		if (this.isTrapEnabled == true) {
 			if (other.gameObject == player) {
 				pc.moveSpeed *= 2.0f;
-				Debug.Log("Player Exited TRAP");
+				//Debug.Log("Player Exited TRAP");
 			}
 		}
 	}

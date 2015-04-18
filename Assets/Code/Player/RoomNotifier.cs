@@ -20,7 +20,7 @@ public class RoomNotifier : MonoBehaviour
 
 	void OnTriggerEnter(Collider other){
 		if (other.CompareTag ("Player")) {
-			Debug.Log("Player Entered Room");
+			//Debug.Log("Player Entered Room");
 			string roomNumber = this.collider.tag;
 			int currentRoomNumber = pc.GetRoomNumber();
 			switch(roomNumber){

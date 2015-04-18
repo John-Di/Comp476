@@ -41,7 +41,6 @@ public class BugController : MonoBehaviour {
 
 		pc = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 		waypointArray = GameObject.FindGameObjectsWithTag ("Waypoint");
-		GetComponent<AIMovement>().MaxVelocity = Random.Range (3.5f, 4.5f);
 
 		//Set Initial state to Wait
 		bugState = State.Chase;

@@ -40,7 +40,7 @@ public class Flashlight : MonoBehaviour
 		}
 		else if(flashlight.intensity == 0 && lightBattery < batteryLife)
 		{
-			lightBattery += Time.deltaTime;
+			lightBattery += Time.deltaTime * 2f;
 		}
 
 		if(lightBattery <= 0f && flashlight.intensity != 0)
@@ -58,7 +58,7 @@ public class Flashlight : MonoBehaviour
 			}
 			else
 			{
-				player.fearLevel -= 0.05f;
+				player.fearLevel -= 0.04f;
 			}
 			player.flashLightTimer = 0f;
 		}

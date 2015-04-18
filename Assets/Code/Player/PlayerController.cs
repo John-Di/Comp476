@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
 	void Awake()
 	{
 		anim = transform.GetChild(0).GetComponent<Animator>();
-		Screen.lockCursor = true;
 		head = GameObject.Find("Head").transform;
 	}
 
@@ -61,12 +60,11 @@ public class PlayerController : MonoBehaviour
 	{
 		float mouseX = Input.GetAxis("Mouse X");
 		float mouseY = Input.GetAxis("Mouse Y");
-		
 		rotationY += mouseX * turnSpeed * Time.deltaTime;
 		rotationX -= mouseY * turnSpeed * Time.deltaTime;
 		rotationX = Mathf.Clamp(rotationX, -maxRangeMouseY, maxRangeMouseY);
-		transform.rotation = Quaternion.Euler(new Vector3(0 , rotationY, 0));
-		head.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
+		transform.rotation = Quaternion.Euler(new Vector3(0 , rotationY + 180f, 0));
+		head.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY + 180f, 0));
 	}
 	
 	void UpdateMovement()
@@ -75,17 +73,17 @@ public class PlayerController : MonoBehaviour
 		float axisZ = Input.GetAxis("Vertical");
 		
 		var speed = new Vector3(0, rigidbody.velocity.y, 0);
-		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.right * axisX * moveSpeed * Time.deltaTime;
-		speed += Quaternion.Euler(0, rotationY, 0) * Vector3.forward * axisZ * moveSpeed * Time.deltaTime;
+		speed += Quaternion.Euler(0, rotationY, 0) * -Vector3.right * axisX * moveSpeed * Time.deltaTime;
+		speed += Quaternion.Euler(0, rotationY, 0) * -Vector3.forward * axisZ * moveSpeed * Time.deltaTime;
 		rigidbody.velocity = speed;
 
 		float velMagn = rigidbody.velocity.magnitude;
-		if(velMagn > 0.1f && !footSteps.isPlaying && transform.position.y <= 2f)
+		if(velMagn > 0.1f && !footSteps.isPlaying && transform.position.y <= 3f)
 		{
 			footSteps.Play();
 			flashLightAnim.SetBool("isMoving",true);
 		}
-		else if((velMagn <= 0.1f || transform.position.y > 2f) && footSteps.isPlaying)
+		else if((velMagn <= 0.1f || transform.position.y > 3f) && footSteps.isPlaying)
 		{
 			footSteps.Stop();
 			flashLightAnim.SetBool("isMoving",false);

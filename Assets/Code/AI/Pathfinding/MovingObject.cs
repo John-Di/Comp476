@@ -63,7 +63,7 @@ public class MovingObject : MonoBehaviour {
 				//Store the orientation of each collider
 				Vector3 vHit1 = hitColliders[i].transform.position + (hitColliders[i].transform.localScale.x / 2) * (Quaternion.AngleAxis(90, Vector3.up) * hitColliders[i].transform.forward);
 				Vector3 vHit2 = hitColliders[i].transform.position + (hitColliders[i].transform.localScale.x / 2) * (Quaternion.AngleAxis(-90, Vector3.up) * hitColliders[i].transform.forward);
-				Debug.DrawRay(vHit1, (vHit2 - vHit1), Color.green, 1f);
+				//Debug.DrawRay(vHit1, (vHit2 - vHit1), Color.green, 5f);
 				Vector3 orient = (vHit1 - vHit2).normalized;
 				colliderDirections.Add(orient);
 			}

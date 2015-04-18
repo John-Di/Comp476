@@ -29,7 +29,7 @@ public class Trampoline : Trap {
 
 	IEnumerator RegainControl(){
 		yield return new WaitForSeconds(2f);
-		player.rigidbody.constraints = RigidbodyConstraints.None;
+		player.rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
 		yield return new WaitForSeconds (5f);
 		EnableTrap ();
 	}

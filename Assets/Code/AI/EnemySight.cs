@@ -24,7 +24,7 @@ public class EnemySight : MonoBehaviour {
 
 	void OnTriggerStay(Collider other){
 		if (other.gameObject == player) {
-			Debug.Log("Player IN RADIUS");
+			//Debug.Log("Player IN RADIUS");
 			//By default player is not in sight
 		
 
@@ -37,14 +37,9 @@ public class EnemySight : MonoBehaviour {
 				RaycastHit hit;
 
 				if(Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, col.radius)){
-
-					if(hit.collider.gameObject == player){
-						//Do Something
-						Debug.Log("PlayerIsInSight");
-					}
 					//Player In Sight
 					playerInSight = true;
-					Debug.Log("Player IN ANGLE OF VIEW");
+					//Debug.Log("Player IN ANGLE OF VIEW");
 				}
 			}else{
 				playerInSight = false;

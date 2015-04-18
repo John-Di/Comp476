@@ -4,6 +4,7 @@ using System.Collections;
 public class EnemyThrow : MonoBehaviour
 {
 	GameObject player;
+	PlayerController pc;
 	private SphereCollider col;
 	public bool playerInRange = false;
 	public bool playerInFieldOfView = false;
@@ -14,7 +15,7 @@ public class EnemyThrow : MonoBehaviour
 	public GameObject projectile;
 	public Transform projectilePos;
 	private float shotInterval;
-	private float resetShotInterval = 3f;
+	private float resetShotInterval = 1.5f;
 
 	private AIMovement movement;
 	private Animation anim;
@@ -25,6 +26,7 @@ public class EnemyThrow : MonoBehaviour
 	void Awake ()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player");
+		pc = player.GetComponent<PlayerController> ();
 		movement = GetComponent<AIMovement>();
 		col = GetComponent<SphereCollider> ();
 		anim = GetComponent<Animation> ();
@@ -36,10 +38,23 @@ public class EnemyThrow : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if(!pc.anim.GetBool("isDead"))
+		{
+			float dist = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z).magnitude;
+			if(dist <= 30f)
+			{
+				playerInRange = true;
+			}
+			else
+			{
+				playerInRange = false;
+				playerInFieldOfView = false;
+			}
+		}
 		if (playerInRange)
 		{
 			foreach (AnimationState state in anim) {
-				if(state.name == "idle")
+				if(state.name == "attack")
 				{
 					anim.clip = state.clip;
 					anim.Play();
@@ -77,27 +92,26 @@ public class EnemyThrow : MonoBehaviour
 		}
 	}
 
-	void OnTriggerStay(Collider other)
-	{
-		if (other.gameObject == player)
-		{
-			playerInRange = true;
-		}
-	}
-
-	void OnTriggerExit(Collider other)
-	{
-		if (other.gameObject == player)
-		{
-			playerInRange = false;
-			playerInFieldOfView = false;
-		}
-	}
-
 	void ThrowAttack()
 	{
-
 		GameObject attack = (GameObject) Instantiate (projectile, transform.GetChild(0).transform.position, Quaternion.identity);
 		attack.rigidbody.AddForce((player.transform.position - projectilePos.transform.position).normalized *400f);
 	}
+
+//	void OnTriggerStay(Collider other)
+//	{
+//		if (other.gameObject == player)
+//		{
+//			playerInRange = true;
+//		}
+//	}
+//
+//	void OnTriggerExit(Collider other)
+//	{
+//		if (other.gameObject == player)
+//		{
+//			playerInRange = false;
+//			playerInFieldOfView = false;
+//		}
+//	}
 }

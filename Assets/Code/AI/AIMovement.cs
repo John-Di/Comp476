@@ -30,7 +30,6 @@ public class AIMovement : MonoBehaviour
 		UpdateTarget();
 		UpdateRotation(Time.deltaTime);
 		UpdateVelocities(Time.deltaTime);
-		UpdateReposition ();
 
 		if(Vector3.Angle (velocity, transform.forward) < 45f || direction.magnitude <= 5f)
 		{

@@ -14,7 +14,7 @@ public class OogieKill : MonoBehaviour {
 	
 	}
 
-	void OnCollisionEnter(Collision other){
+	void OnTriggerEnter(Collider other){
 		if (other.gameObject.CompareTag ("Player")) {
 			other.gameObject.GetComponent<PlayerController>().Die();
 			this.gameObject.GetComponent<PathfindingAgent>().enabled = false;

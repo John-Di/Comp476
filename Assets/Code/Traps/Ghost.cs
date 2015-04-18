@@ -10,7 +10,7 @@ public class Ghost : Trap {
 	void Start () {
 		scream = GetComponent<AudioSource> ();
 
-		fearValue = 0.15f;
+		fearValue = 0.1f;
 	}
 
 	void OnTriggerEnter(Collider coll)

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class PathfindingAgent : MonoBehaviour {
 	public Transform target;
-	public float radius = 1f;
 
 	Vector3 curTarget;
 	
@@ -21,11 +20,11 @@ public class PathfindingAgent : MonoBehaviour {
 	AIMovement movement;
 	CollisionAvoidance avoid;
 	MovingObject lastObstacle;
-
+	Vector3 wallAvoidanceDirection;
+	bool avoidWall = false;
 	Vector3 curPos, lastPos;
 	bool targetMoved = false;
 	bool hasInit = false;
-	Vector3 posX1, posX2;
 	float maxVel;
 
 	// Use this for initialization
@@ -39,12 +38,9 @@ public class PathfindingAgent : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		posX1 = transform.position + Quaternion.AngleAxis(90, Vector3.up) * transform.forward;
-		posX2 = transform.position + Quaternion.AngleAxis (-90, Vector3.up) * transform.forward;
-
 		bool seenTarget = false;
 		//If player can be seen make it the current target
-		if(!Physics.Linecast (posX1, target.transform.position, AI_Pathfinding.layoutMask) && !Physics.Linecast (posX2, target.transform.position, AI_Pathfinding.layoutMask))
+		if(!Physics.Linecast (transform.position, target.transform.position, AI_Pathfinding.layoutMask))
 		{
 			bool targetReachable = false;
 			RaycastHit hitCheck;
@@ -67,7 +63,7 @@ public class PathfindingAgent : MonoBehaviour {
 				seenTarget = true;
 			}
 		}
-		else if(!hasInit || TargetMoved())
+		if(!hasInit || (!seenTarget && TargetMoved()))
 		{
 			hasInit = true;
 			try
@@ -76,30 +72,24 @@ public class PathfindingAgent : MonoBehaviour {
 			}
 			catch (System.Exception e) 
 			{
-				//print (e.GetType ());
+				print (e.GetType ());
 				return;
 			}
 		}
-		
+
 		//Draw();
+		//Debug.DrawRay (transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.forward * 3, Color.blue);
+		//Debug.DrawRay (transform.position, Quaternion.AngleAxis(-45, Vector3.up) * transform.forward * 3, Color.blue);
 		
 		//Current target is current node path being seeked
 		if(!seenTarget)
 		{
 			curTarget = movement.target;
-			if(gameObject.tag != "Gerald")
-				movement.MaxVelocity = maxVel * 2f;
 		}
-		else if(Vector3.Distance (target.transform.position, transform.position) >= 40f && gameObject.tag != "Gerald")
-			movement.MaxVelocity = maxVel * 2f;
-		else if(gameObject.tag != "Gerald")
-			movement.MaxVelocity = maxVel;
-
 		if(avoid.enabled)
 			avoid.target = curTarget;
 
-		//Debug.DrawLine (posX1, curTarget, Color.red);
-		//Debug.DrawLine (posX2, curTarget, Color.red);
+		//Debug.DrawLine (transform.position, curTarget, Color.red);
 
 		RaycastHit hit;
 		//Check for collisions with dynamic obstacles (e.g. doors)
@@ -108,9 +98,12 @@ public class PathfindingAgent : MonoBehaviour {
 			//If obstacle is not blocking, simply avoid it. Otherwise recalculate path if the current one is not going to the endNode;
 			if(!hit.transform.GetComponent<MovingObject>().isBlocking)
 			{
-				movement.enabled = false;
-				avoid.enabled = true;
-				return;
+				if(seenTarget)
+				{
+					movement.enabled = false;
+					avoid.enabled = true;
+					return;
+				}
 			}
 			else
 			{
@@ -128,6 +121,9 @@ public class PathfindingAgent : MonoBehaviour {
 				return;
 			}
 		}
+
+		if(avoidWall)
+			UpdateWallAvoidance();
 		
 		//Smooth path by cutting unecessary nodes from the path as the agent travels the nodes
 		pathVertices = smoothPath(pathVertices);
@@ -162,8 +158,10 @@ public class PathfindingAgent : MonoBehaviour {
 		lastPos = curPos;
 
 		if(pathVertices.Count != 0 && !Physics.Linecast(pathVertices[pathVertices.Count - 1], curPos, AI_Pathfinding.layoutMask))
+		{
 			targetMovedStopped = false;
-		
+		}
+
 		return targetMovedStopped;
 	}
 	
@@ -305,7 +303,7 @@ public class PathfindingAgent : MonoBehaviour {
 			if(!visitNode_AStarEuclideanDistance (openList[0]))
 			{
 				openList[0] = smallestHeuristicNode;
-				print ("unreachable path: " + gameObject.name + " : " + transform.position);
+				//print ("unreachable path: " + gameObject.name + " : " + transform.position);
 				transform.position = new Vector3(67.1f, transform.position.y, 86.6f);
 				break;
 			}
@@ -335,7 +333,7 @@ public class PathfindingAgent : MonoBehaviour {
 		//Check from the endNode of the inputPath the first visible node
 		for(int i = inputPath.Count - 1; i >= 0; i--)
 		{
-			if(!Physics.Linecast (posX1, inputPath[i], AI_Pathfinding.layoutMask) && !Physics.Linecast (posX2, inputPath[i], AI_Pathfinding.layoutMask))
+			if(!Physics.Linecast (transform.position, inputPath[i], AI_Pathfinding.layoutMask))
 			{
 				RaycastHit hit;
 				//Since smoothing happens every frame, check to avoid going to a blocked off path.
@@ -363,7 +361,7 @@ public class PathfindingAgent : MonoBehaviour {
 			outputPath.Add(inputPath[i]);
 		}
 		
-
+//
 //		for(int i = (index + 2); i <= inputPath.Count - 1; i++)
 //		{
 //			if(Physics.Linecast (outputPath[outputPath.Count - 1], inputPath[i], AI_Pathfinding.layoutMask))
@@ -377,14 +375,43 @@ public class PathfindingAgent : MonoBehaviour {
 		return outputPath;
 	}
 
-//	void OnCollisionStay(Collision collision) {
-//		foreach (ContactPoint contact in collision.contacts) {
-//			if(contact.otherCollider.tag != "Wall")
-//				continue;
-//			Vector3 newPos = rigidbody.position + ((contact.normal.normalized + (movement.target - transform.position).normalized) * 0.5f);
-//			newPos.y = transform.position.y;
-//			movement.Reposition(newPos);
-//			//Debug.DrawRay(contact.point, contact.normal, Color.white,10f);
-//		}
-//	}
+	void UpdateWallAvoidance()
+	{
+		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (wallAvoidanceDirection), Time.deltaTime);
+		transform.rotation = Quaternion.Euler (0, transform.rotation.eulerAngles.y, 0);
+		transform.position += transform.forward * maxVel * Time.deltaTime;
+	}
+
+	void OnTriggerStay(Collider collision) {
+		if(avoid.enabled || !collision.CompareTag("Wall"))
+			return;
+
+		//Ray ray = new Ray(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.forward);
+		Ray ray1 = new Ray(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.forward);
+		Ray ray2 = new Ray(transform.position, Quaternion.AngleAxis(-45, Vector3.up) * transform.forward);
+		Vector3 dir = (curTarget - transform.position).normalized;
+		RaycastHit hitLayout;
+		if(Physics.Raycast(ray1, out hitLayout, 3, AI_Pathfinding.layoutMask))
+		{
+			wallAvoidanceDirection = dir;
+			wallAvoidanceDirection += hitLayout.normal;
+			movement.enabled = false;
+			avoidWall = true;
+			//Debug.DrawLine(hitLayout.point,hitLayout.point + hitLayout.normal, Color.white, 10f);
+		}
+		else if(Physics.Raycast(ray2, out hitLayout, 3, AI_Pathfinding.layoutMask))
+		{
+			wallAvoidanceDirection = dir;
+			wallAvoidanceDirection += hitLayout.normal;
+			movement.enabled = false;
+			avoidWall = true;
+			//Debug.DrawLine(hitLayout.point,hitLayout.point + hitLayout.normal, Color.white, 10f);
+		}
+	}
+	void OnTriggerExit(Collider collision) {
+		if(avoid.enabled || !collision.CompareTag("Wall"))
+			return;
+		movement.enabled = true;
+		avoidWall = false;
+	}
 }

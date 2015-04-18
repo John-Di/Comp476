@@ -5,8 +5,6 @@ public class CollisionAvoidance : MonoBehaviour {
 	public Vector3 target;
 
 	float repelForce = 150f;
-	
-	float speed;
 
 	AIMovement movement;
 	MovingObject obstacle;
@@ -16,7 +14,6 @@ public class CollisionAvoidance : MonoBehaviour {
 	void Start () {
 		movement = GetComponent<AIMovement> ();
 		agent = GetComponent<PathfindingAgent> ();
-		speed = movement.MaxVelocity;
 
 		enabled = false;
 	}
@@ -50,17 +47,18 @@ public class CollisionAvoidance : MonoBehaviour {
 			}
 		}
 
+		Debug.DrawRay (transform.position, transform.forward, Color.red);
 		RaycastHit hit;
 		//Get normal of obstacle and add it to the direction
 		if(Physics.Raycast(ray, out hit, Vector3.Distance(target, transform.position), AI_Pathfinding.movingMask))
 		{
 			obstacle = hit.transform.GetComponent<MovingObject>();
-
+			//Debug.DrawLine(hit.point,hit.point + hit.normal, Color.white, 10f);
 			direction += hit.normal * repelForce;
 		}
 
 		transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (direction), Time.deltaTime);
 		transform.rotation = Quaternion.Euler (0, transform.rotation.eulerAngles.y, 0);
-		transform.position += transform.forward * speed * Time.deltaTime;
+		transform.position += transform.forward * movement.MaxVelocity * Time.deltaTime;
 	}
 }

@@ -129,7 +129,7 @@ ModelImporter:
     400122: Bip001 L Finger0Nub
     4300000: demon
     7400000: walk
-    7400002: Take 0010
+    7400002: attack
     7400004: run
     7400006: idle
     11100000: //RootNode
@@ -386,10 +386,10 @@ ModelImporter:
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
-      name: Take 0010
+      name: attack
       takeName: Take 001
-      firstFrame: 0
-      lastFrame: 253
+      firstFrame: 106
+      lastFrame: 130
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

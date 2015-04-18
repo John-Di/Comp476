@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class OogieDecision : MonoBehaviour {
 	static float  timer; 
@@ -19,11 +20,10 @@ public class OogieDecision : MonoBehaviour {
 		respawnTimer = Random.Range (20, 30);
 		oogie = GameObject.FindGameObjectWithTag ("Oogie");
 		waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
-		randomPosition = Random.Range(0, waypoints.Length);
 		oogieAudio = GetComponent<AudioSource> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 
-		oogie = (GameObject)Instantiate (oogiePrefab, waypoints[randomPosition].transform.position, Quaternion.identity);
+		oogie = (GameObject)Instantiate (oogiePrefab, new Vector3(123.7f, 0f, -75.5f), Quaternion.identity);
 		oogie.transform.position = new Vector3(oogie.transform.position.x, 0.5f, oogie.transform.position.z);
 		oogie.GetComponent<PathfindingAgent> ().target = GameObject.FindGameObjectWithTag ("Player").transform;
 	}

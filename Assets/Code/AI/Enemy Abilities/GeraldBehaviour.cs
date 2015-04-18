@@ -38,7 +38,7 @@ public class GeraldBehaviour : MonoBehaviour
 		float dist = new Vector3 (pa.target.position.x - transform.position.x, 0, pa.target.position.z - transform.position.z).magnitude;
 		if(dist <= 0.2f)
 		{
-			Debug.Log ("Reached target");
+			//Debug.Log ("Reached target");
 			NewWaypoint ();
 		}
 	}
